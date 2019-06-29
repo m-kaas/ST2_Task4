@@ -8,24 +8,42 @@
 
 /* Begin PBXBuildFile section */
 		E378551422C76A82003114FD /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E378551322C76A82003114FD /* AppDelegate.m */; };
-		E378551722C76A82003114FD /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E378551622C76A82003114FD /* ViewController.m */; };
 		E378551A22C76A82003114FD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E378551822C76A82003114FD /* Main.storyboard */; };
 		E378551C22C76A87003114FD /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E378551B22C76A87003114FD /* Assets.xcassets */; };
 		E378551F22C76A87003114FD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E378551D22C76A87003114FD /* LaunchScreen.storyboard */; };
 		E378552222C76A87003114FD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = E378552122C76A87003114FD /* main.m */; };
+		E378553022C76CF6003114FD /* WeeklyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E378552E22C76CF6003114FD /* WeeklyViewController.m */; };
+		E378553122C76CF6003114FD /* WeeklyViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E378552F22C76CF6003114FD /* WeeklyViewController.xib */; };
+		E378553922C779F0003114FD /* UIColor+CustomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E378553822C779F0003114FD /* UIColor+CustomColors.m */; };
+		E378553D22C77B06003114FD /* UIFont+CustomFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = E378553C22C77B06003114FD /* UIFont+CustomFonts.m */; };
+		E378554122C77E82003114FD /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E378554022C77E82003114FD /* MainViewController.m */; };
+		E378554622C78DC3003114FD /* WeekCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E378554522C78DC3003114FD /* WeekCollectionView.m */; };
+		E378554822C78DD1003114FD /* WeekCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E378554722C78DD1003114FD /* WeekCollectionView.xib */; };
+		E378554B22C79308003114FD /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E378554A22C79308003114FD /* EventKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		E378550F22C76A82003114FD /* DailyCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DailyCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E378551222C76A82003114FD /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E378551322C76A82003114FD /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		E378551522C76A82003114FD /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		E378551622C76A82003114FD /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		E378551922C76A82003114FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		E378551B22C76A87003114FD /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E378551E22C76A87003114FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E378552022C76A87003114FD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E378552122C76A87003114FD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		E378552D22C76CF6003114FD /* WeeklyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeeklyViewController.h; sourceTree = "<group>"; };
+		E378552E22C76CF6003114FD /* WeeklyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeeklyViewController.m; sourceTree = "<group>"; };
+		E378552F22C76CF6003114FD /* WeeklyViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeeklyViewController.xib; sourceTree = "<group>"; };
+		E378553722C779F0003114FD /* UIColor+CustomColors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+CustomColors.h"; sourceTree = "<group>"; };
+		E378553822C779F0003114FD /* UIColor+CustomColors.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+CustomColors.m"; sourceTree = "<group>"; };
+		E378553B22C77B06003114FD /* UIFont+CustomFonts.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+CustomFonts.h"; sourceTree = "<group>"; };
+		E378553C22C77B06003114FD /* UIFont+CustomFonts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIFont+CustomFonts.m"; sourceTree = "<group>"; };
+		E378553F22C77E82003114FD /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		E378554022C77E82003114FD /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		E378554422C78DC3003114FD /* WeekCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeekCollectionView.h; sourceTree = "<group>"; };
+		E378554522C78DC3003114FD /* WeekCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeekCollectionView.m; sourceTree = "<group>"; };
+		E378554722C78DD1003114FD /* WeekCollectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeekCollectionView.xib; sourceTree = "<group>"; };
+		E378554A22C79308003114FD /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E378554B22C79308003114FD /* EventKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -44,6 +63,7 @@
 			children = (
 				E378551122C76A82003114FD /* DailyCalendar */,
 				E378551022C76A82003114FD /* Products */,
+				E378554922C79308003114FD /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,15 +80,105 @@
 			children = (
 				E378551222C76A82003114FD /* AppDelegate.h */,
 				E378551322C76A82003114FD /* AppDelegate.m */,
-				E378551522C76A82003114FD /* ViewController.h */,
-				E378551622C76A82003114FD /* ViewController.m */,
+				E378553522C779BC003114FD /* Categories */,
+				E378554222C78D4F003114FD /* Views */,
+				E378552B22C76CB4003114FD /* View Controllers */,
+				E378552822C76AA4003114FD /* Resources */,
+				E378552122C76A87003114FD /* main.m */,
+			);
+			path = DailyCalendar;
+			sourceTree = "<group>";
+		};
+		E378552822C76AA4003114FD /* Resources */ = {
+			isa = PBXGroup;
+			children = (
 				E378551822C76A82003114FD /* Main.storyboard */,
 				E378551B22C76A87003114FD /* Assets.xcassets */,
 				E378551D22C76A87003114FD /* LaunchScreen.storyboard */,
 				E378552022C76A87003114FD /* Info.plist */,
-				E378552122C76A87003114FD /* main.m */,
 			);
-			path = DailyCalendar;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E378552B22C76CB4003114FD /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				E378553E22C77E71003114FD /* MainViewController */,
+				E378552C22C76CC5003114FD /* WeeklyViewController */,
+			);
+			path = "View Controllers";
+			sourceTree = "<group>";
+		};
+		E378552C22C76CC5003114FD /* WeeklyViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E378552D22C76CF6003114FD /* WeeklyViewController.h */,
+				E378552E22C76CF6003114FD /* WeeklyViewController.m */,
+				E378552F22C76CF6003114FD /* WeeklyViewController.xib */,
+			);
+			path = WeeklyViewController;
+			sourceTree = "<group>";
+		};
+		E378553522C779BC003114FD /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				E378553A22C77AE9003114FD /* UIFont+CustomFonts */,
+				E378553622C779CB003114FD /* UIColor+CustomColors */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		E378553622C779CB003114FD /* UIColor+CustomColors */ = {
+			isa = PBXGroup;
+			children = (
+				E378553722C779F0003114FD /* UIColor+CustomColors.h */,
+				E378553822C779F0003114FD /* UIColor+CustomColors.m */,
+			);
+			path = "UIColor+CustomColors";
+			sourceTree = "<group>";
+		};
+		E378553A22C77AE9003114FD /* UIFont+CustomFonts */ = {
+			isa = PBXGroup;
+			children = (
+				E378553B22C77B06003114FD /* UIFont+CustomFonts.h */,
+				E378553C22C77B06003114FD /* UIFont+CustomFonts.m */,
+			);
+			path = "UIFont+CustomFonts";
+			sourceTree = "<group>";
+		};
+		E378553E22C77E71003114FD /* MainViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E378553F22C77E82003114FD /* MainViewController.h */,
+				E378554022C77E82003114FD /* MainViewController.m */,
+			);
+			path = MainViewController;
+			sourceTree = "<group>";
+		};
+		E378554222C78D4F003114FD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E378554322C78D80003114FD /* WeekCollectionView */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E378554322C78D80003114FD /* WeekCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				E378554422C78DC3003114FD /* WeekCollectionView.h */,
+				E378554522C78DC3003114FD /* WeekCollectionView.m */,
+				E378554722C78DD1003114FD /* WeekCollectionView.xib */,
+			);
+			path = WeekCollectionView;
+			sourceTree = "<group>";
+		};
+		E378554922C79308003114FD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E378554A22C79308003114FD /* EventKit.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -129,6 +239,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E378551F22C76A87003114FD /* LaunchScreen.storyboard in Resources */,
+				E378554822C78DD1003114FD /* WeekCollectionView.xib in Resources */,
+				E378553122C76CF6003114FD /* WeeklyViewController.xib in Resources */,
 				E378551C22C76A87003114FD /* Assets.xcassets in Resources */,
 				E378551A22C76A82003114FD /* Main.storyboard in Resources */,
 			);
@@ -141,9 +253,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E378551722C76A82003114FD /* ViewController.m in Sources */,
 				E378552222C76A87003114FD /* main.m in Sources */,
+				E378554122C77E82003114FD /* MainViewController.m in Sources */,
+				E378553022C76CF6003114FD /* WeeklyViewController.m in Sources */,
+				E378553D22C77B06003114FD /* UIFont+CustomFonts.m in Sources */,
+				E378553922C779F0003114FD /* UIColor+CustomColors.m in Sources */,
 				E378551422C76A82003114FD /* AppDelegate.m in Sources */,
+				E378554622C78DC3003114FD /* WeekCollectionView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,7 +403,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BPJZ76T894;
-				INFOPLIST_FILE = DailyCalendar/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/DailyCalendar/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -304,7 +420,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = BPJZ76T894;
-				INFOPLIST_FILE = DailyCalendar/Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/DailyCalendar/Resources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

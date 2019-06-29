@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  MainViewController.h
 //  DailyCalendar
 //
 //  Created by Liubou Sakalouskaya on 6/29/19.
@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+NS_ASSUME_NONNULL_BEGIN
 
+@interface MainViewController : UINavigationController
 
 @end
 
+NS_ASSUME_NONNULL_END

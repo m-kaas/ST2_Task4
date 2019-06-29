@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "WeeklyViewController.h"
+#import "MainViewController.h"
 
 @interface AppDelegate ()
 
@@ -16,7 +18,11 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    WeeklyViewController *weeklyVC = [[WeeklyViewController alloc] initWithNibName:NSStringFromClass([WeeklyViewController class]) bundle:nil];
+    MainViewController *navCon = [[MainViewController alloc] initWithRootViewController:weeklyVC];
+    [self.window setRootViewController: navCon];
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
