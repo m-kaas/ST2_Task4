@@ -17,9 +17,11 @@
 		E378553922C779F0003114FD /* UIColor+CustomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = E378553822C779F0003114FD /* UIColor+CustomColors.m */; };
 		E378553D22C77B06003114FD /* UIFont+CustomFonts.m in Sources */ = {isa = PBXBuildFile; fileRef = E378553C22C77B06003114FD /* UIFont+CustomFonts.m */; };
 		E378554122C77E82003114FD /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E378554022C77E82003114FD /* MainViewController.m */; };
-		E378554622C78DC3003114FD /* WeekCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = E378554522C78DC3003114FD /* WeekCollectionView.m */; };
-		E378554822C78DD1003114FD /* WeekCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E378554722C78DD1003114FD /* WeekCollectionView.xib */; };
 		E378554B22C79308003114FD /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E378554A22C79308003114FD /* EventKit.framework */; };
+		E378554F22C7F962003114FD /* AccessDeniedView.m in Sources */ = {isa = PBXBuildFile; fileRef = E378554E22C7F962003114FD /* AccessDeniedView.m */; };
+		E378555322C80FAD003114FD /* UIColor+OnePtImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E378555122C80FAD003114FD /* UIColor+OnePtImage.m */; };
+		E378555822C8A3DB003114FD /* WeeklyCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E378555622C8A3DB003114FD /* WeeklyCollectionViewCell.m */; };
+		E378555922C8A3DB003114FD /* WeeklyCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E378555722C8A3DB003114FD /* WeeklyCollectionViewCell.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,10 +42,14 @@
 		E378553C22C77B06003114FD /* UIFont+CustomFonts.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIFont+CustomFonts.m"; sourceTree = "<group>"; };
 		E378553F22C77E82003114FD /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		E378554022C77E82003114FD /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
-		E378554422C78DC3003114FD /* WeekCollectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeekCollectionView.h; sourceTree = "<group>"; };
-		E378554522C78DC3003114FD /* WeekCollectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeekCollectionView.m; sourceTree = "<group>"; };
-		E378554722C78DD1003114FD /* WeekCollectionView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeekCollectionView.xib; sourceTree = "<group>"; };
 		E378554A22C79308003114FD /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
+		E378554D22C7F962003114FD /* AccessDeniedView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessDeniedView.h; sourceTree = "<group>"; };
+		E378554E22C7F962003114FD /* AccessDeniedView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AccessDeniedView.m; sourceTree = "<group>"; };
+		E378555122C80FAD003114FD /* UIColor+OnePtImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+OnePtImage.m"; sourceTree = "<group>"; };
+		E378555222C80FAD003114FD /* UIColor+OnePtImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+OnePtImage.h"; sourceTree = "<group>"; };
+		E378555522C8A3DB003114FD /* WeeklyCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeeklyCollectionViewCell.h; sourceTree = "<group>"; };
+		E378555622C8A3DB003114FD /* WeeklyCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeeklyCollectionViewCell.m; sourceTree = "<group>"; };
+		E378555722C8A3DB003114FD /* WeeklyCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeeklyCollectionViewCell.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +128,7 @@
 		E378553522C779BC003114FD /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				E378555022C80F83003114FD /* UIColor+OnePtImage */,
 				E378553A22C77AE9003114FD /* UIFont+CustomFonts */,
 				E378553622C779CB003114FD /* UIColor+CustomColors */,
 			);
@@ -158,19 +165,10 @@
 		E378554222C78D4F003114FD /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E378554322C78D80003114FD /* WeekCollectionView */,
+				E378555422C8A396003114FD /* WeeklyCollectionViewCell */,
+				E378554C22C7F941003114FD /* AccessDeniedView */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		E378554322C78D80003114FD /* WeekCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				E378554422C78DC3003114FD /* WeekCollectionView.h */,
-				E378554522C78DC3003114FD /* WeekCollectionView.m */,
-				E378554722C78DD1003114FD /* WeekCollectionView.xib */,
-			);
-			path = WeekCollectionView;
 			sourceTree = "<group>";
 		};
 		E378554922C79308003114FD /* Frameworks */ = {
@@ -179,6 +177,34 @@
 				E378554A22C79308003114FD /* EventKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E378554C22C7F941003114FD /* AccessDeniedView */ = {
+			isa = PBXGroup;
+			children = (
+				E378554D22C7F962003114FD /* AccessDeniedView.h */,
+				E378554E22C7F962003114FD /* AccessDeniedView.m */,
+			);
+			path = AccessDeniedView;
+			sourceTree = "<group>";
+		};
+		E378555022C80F83003114FD /* UIColor+OnePtImage */ = {
+			isa = PBXGroup;
+			children = (
+				E378555222C80FAD003114FD /* UIColor+OnePtImage.h */,
+				E378555122C80FAD003114FD /* UIColor+OnePtImage.m */,
+			);
+			path = "UIColor+OnePtImage";
+			sourceTree = "<group>";
+		};
+		E378555422C8A396003114FD /* WeeklyCollectionViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				E378555522C8A3DB003114FD /* WeeklyCollectionViewCell.h */,
+				E378555622C8A3DB003114FD /* WeeklyCollectionViewCell.m */,
+				E378555722C8A3DB003114FD /* WeeklyCollectionViewCell.xib */,
+			);
+			path = WeeklyCollectionViewCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -239,10 +265,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E378551F22C76A87003114FD /* LaunchScreen.storyboard in Resources */,
-				E378554822C78DD1003114FD /* WeekCollectionView.xib in Resources */,
 				E378553122C76CF6003114FD /* WeeklyViewController.xib in Resources */,
 				E378551C22C76A87003114FD /* Assets.xcassets in Resources */,
 				E378551A22C76A82003114FD /* Main.storyboard in Resources */,
+				E378555922C8A3DB003114FD /* WeeklyCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,10 +282,12 @@
 				E378552222C76A87003114FD /* main.m in Sources */,
 				E378554122C77E82003114FD /* MainViewController.m in Sources */,
 				E378553022C76CF6003114FD /* WeeklyViewController.m in Sources */,
+				E378555822C8A3DB003114FD /* WeeklyCollectionViewCell.m in Sources */,
+				E378554F22C7F962003114FD /* AccessDeniedView.m in Sources */,
+				E378555322C80FAD003114FD /* UIColor+OnePtImage.m in Sources */,
 				E378553D22C77B06003114FD /* UIFont+CustomFonts.m in Sources */,
 				E378553922C779F0003114FD /* UIColor+CustomColors.m in Sources */,
 				E378551422C76A82003114FD /* AppDelegate.m in Sources */,
-				E378554622C78DC3003114FD /* WeekCollectionView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

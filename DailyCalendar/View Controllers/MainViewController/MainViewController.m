@@ -9,6 +9,7 @@
 #import "MainViewController.h"
 #import "UIColor+CustomColors.h"
 #import "UIFont+CustomFonts.h"
+#import "UIColor+OnePtImage.h"
 
 @interface MainViewController ()
 
@@ -20,8 +21,17 @@
     [super viewDidLoad];
     self.navigationBar.translucent = NO;
     self.navigationBar.barTintColor = [UIColor customDarkBlueColor];
+    self.navigationBar.shadowImage = [[UIColor customDarkBlueColor] onePtImage];
     [self.navigationBar setTitleTextAttributes:@{ NSForegroundColorAttributeName: [UIColor customWhiteColor],
                                                   NSFontAttributeName: [UIFont system17SemiboldFont] }];
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskAll;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    return UIStatusBarStyleLightContent;
 }
 
 @end

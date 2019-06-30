@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WeeklyCollectionViewCell"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="dayCellId" id="gTV-IL-0wX" customClass="WeeklyCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="15" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FC8-jn-93v">
+                        <rect key="frame" x="0.0" y="34" width="100" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="mon" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="axh-dy-Mao">
+                        <rect key="frame" x="0.0" y="55" width="100" height="21"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="axh-dy-Mao" firstAttribute="top" secondItem="FC8-jn-93v" secondAttribute="bottom" id="2fC-AK-Inn"/>
+                <constraint firstItem="SEy-5g-ep8" firstAttribute="trailing" secondItem="axh-dy-Mao" secondAttribute="trailing" id="3am-dg-fL8"/>
+                <constraint firstItem="SEy-5g-ep8" firstAttribute="trailing" secondItem="FC8-jn-93v" secondAttribute="trailing" id="AJ8-s0-8uU"/>
+                <constraint firstItem="axh-dy-Mao" firstAttribute="leading" secondItem="SEy-5g-ep8" secondAttribute="leading" id="YDO-LM-jOZ"/>
+                <constraint firstItem="FC8-jn-93v" firstAttribute="leading" secondItem="SEy-5g-ep8" secondAttribute="leading" id="gx1-zI-iuW"/>
+                <constraint firstItem="axh-dy-Mao" firstAttribute="top" secondItem="SEy-5g-ep8" secondAttribute="centerY" id="i9V-LI-VIo"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="SEy-5g-ep8"/>
+            <size key="customSize" width="100" height="100"/>
+            <connections>
+                <outlet property="dateLabel" destination="FC8-jn-93v" id="puL-qz-lqR"/>
+                <outlet property="dayLabel" destination="axh-dy-Mao" id="JRQ-oZ-SSa"/>
+            </connections>
+            <point key="canvasLocation" x="173.91304347826087" y="145.3125"/>
+        </collectionViewCell>
+    </objects>
+</document>
