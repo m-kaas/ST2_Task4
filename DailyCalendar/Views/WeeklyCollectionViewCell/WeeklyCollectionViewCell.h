@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface WeeklyCollectionViewCell : UICollectionViewCell
 
 @property (strong, nonatomic) NSDate *date;
+@property (assign, nonatomic) BOOL hasEvents;
 
 @end
 

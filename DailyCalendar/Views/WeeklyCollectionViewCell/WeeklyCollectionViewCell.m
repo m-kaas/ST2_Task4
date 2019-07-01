@@ -14,6 +14,8 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dayLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dotLabel;
+
 
 @end
 
@@ -25,6 +27,12 @@
     self.dateLabel.font = [UIFont system17SemiboldFont];
     self.dayLabel.textColor = [UIColor customWhiteColor];
     self.dayLabel.font = [UIFont system12RegularFont];
+    self.dotLabel.font = [UIFont system17SemiboldFont];
+}
+
+- (void)prepareForReuse {
+    self.hasEvents = false;
+    self.selected = NO;
 }
 
 - (void)setSelected:(BOOL)selected {
@@ -36,8 +44,17 @@
     }
 }
 
+- (void)setHasEvents:(BOOL)hasEvents {
+    _hasEvents = hasEvents;
+    if (hasEvents) {
+        self.dotLabel.textColor = [UIColor customWhiteColor];
+    } else {
+        self.dotLabel.textColor = [UIColor clearColor];
+    }
+}
+
 - (void)setDate:(NSDate *)date {
-    if (_date != date) {
+    if (![_date isEqualToDate:date]) {
         _date = date;
     }
     NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:date];

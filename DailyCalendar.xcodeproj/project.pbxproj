@@ -22,6 +22,7 @@
 		E378555322C80FAD003114FD /* UIColor+OnePtImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E378555122C80FAD003114FD /* UIColor+OnePtImage.m */; };
 		E378555822C8A3DB003114FD /* WeeklyCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E378555622C8A3DB003114FD /* WeeklyCollectionViewCell.m */; };
 		E378555922C8A3DB003114FD /* WeeklyCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = E378555722C8A3DB003114FD /* WeeklyCollectionViewCell.xib */; };
+		E378556422C9DF2D003114FD /* EventStore.m in Sources */ = {isa = PBXBuildFile; fileRef = E378556322C9DF2D003114FD /* EventStore.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,8 @@
 		E378555522C8A3DB003114FD /* WeeklyCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WeeklyCollectionViewCell.h; sourceTree = "<group>"; };
 		E378555622C8A3DB003114FD /* WeeklyCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WeeklyCollectionViewCell.m; sourceTree = "<group>"; };
 		E378555722C8A3DB003114FD /* WeeklyCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WeeklyCollectionViewCell.xib; sourceTree = "<group>"; };
+		E378556222C9DF21003114FD /* EventStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventStore.h; sourceTree = "<group>"; };
+		E378556322C9DF2D003114FD /* EventStore.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventStore.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,6 +89,7 @@
 			children = (
 				E378551222C76A82003114FD /* AppDelegate.h */,
 				E378551322C76A82003114FD /* AppDelegate.m */,
+				E378556022C9DEFC003114FD /* Models */,
 				E378553522C779BC003114FD /* Categories */,
 				E378554222C78D4F003114FD /* Views */,
 				E378552B22C76CB4003114FD /* View Controllers */,
@@ -207,6 +211,23 @@
 			path = WeeklyCollectionViewCell;
 			sourceTree = "<group>";
 		};
+		E378556022C9DEFC003114FD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E378556122C9DF05003114FD /* EventStore */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E378556122C9DF05003114FD /* EventStore */ = {
+			isa = PBXGroup;
+			children = (
+				E378556222C9DF21003114FD /* EventStore.h */,
+				E378556322C9DF2D003114FD /* EventStore.m */,
+			);
+			path = EventStore;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -283,6 +304,7 @@
 				E378554122C77E82003114FD /* MainViewController.m in Sources */,
 				E378553022C76CF6003114FD /* WeeklyViewController.m in Sources */,
 				E378555822C8A3DB003114FD /* WeeklyCollectionViewCell.m in Sources */,
+				E378556422C9DF2D003114FD /* EventStore.m in Sources */,
 				E378554F22C7F962003114FD /* AccessDeniedView.m in Sources */,
 				E378555322C80FAD003114FD /* UIColor+OnePtImage.m in Sources */,
 				E378553D22C77B06003114FD /* UIFont+CustomFonts.m in Sources */,
