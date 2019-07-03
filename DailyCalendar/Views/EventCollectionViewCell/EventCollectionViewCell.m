@@ -27,10 +27,11 @@
     self.eventTitleLabel.font = [UIFont system17MediumFont];
     self.eventTitleLabel.numberOfLines = 0;
     self.eventTitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    [NSLayoutConstraint activateConstraints:@[[self.eventTitleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
-                                              [self.eventTitleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
-                                              [self.contentView.trailingAnchor constraintEqualToAnchor:self.eventTitleLabel.trailingAnchor],
-                                              [self.contentView.bottomAnchor constraintGreaterThanOrEqualToAnchor:self.eventTitleLabel.bottomAnchor]]];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.eventTitleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.leadingAnchor],
+        [self.eventTitleLabel.topAnchor constraintEqualToAnchor:self.contentView.layoutMarginsGuide.topAnchor],
+        [self.contentView.layoutMarginsGuide.trailingAnchor constraintEqualToAnchor:self.eventTitleLabel.trailingAnchor],
+        [self.contentView.layoutMarginsGuide.bottomAnchor constraintGreaterThanOrEqualToAnchor:self.eventTitleLabel.bottomAnchor]]];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame

@@ -30,6 +30,8 @@
 		E378558922CB6F8B003114FD /* EventCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E378558822CB6F8B003114FD /* EventCollectionViewCell.m */; };
 		E378559322CC6657003114FD /* EventGridLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = E378559222CC6657003114FD /* EventGridLayout.m */; };
 		E378559822CCAC64003114FD /* DottedLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = E378559722CCAC64003114FD /* DottedLineView.m */; };
+		E378559C22CCD1A6003114FD /* TimeLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = E378559B22CCD1A6003114FD /* TimeLabelView.m */; };
+		E37855A022CCE068003114FD /* TimeLabelViewLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = E378559F22CCE068003114FD /* TimeLabelViewLayoutAttributes.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +74,10 @@
 		E378559222CC6657003114FD /* EventGridLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventGridLayout.m; sourceTree = "<group>"; };
 		E378559622CCAC64003114FD /* DottedLineView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DottedLineView.h; sourceTree = "<group>"; };
 		E378559722CCAC64003114FD /* DottedLineView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DottedLineView.m; sourceTree = "<group>"; };
+		E378559A22CCD1A6003114FD /* TimeLabelView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimeLabelView.h; sourceTree = "<group>"; };
+		E378559B22CCD1A6003114FD /* TimeLabelView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimeLabelView.m; sourceTree = "<group>"; };
+		E378559E22CCE068003114FD /* TimeLabelViewLayoutAttributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimeLabelViewLayoutAttributes.h; sourceTree = "<group>"; };
+		E378559F22CCE068003114FD /* TimeLabelViewLayoutAttributes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimeLabelViewLayoutAttributes.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -274,6 +280,8 @@
 		E378558522CB6C29003114FD /* CollectionViewCustomLayout */ = {
 			isa = PBXGroup;
 			children = (
+				E378559D22CCE031003114FD /* TimeLabelViewLayoutAttributes */,
+				E378559922CCD185003114FD /* TimeLabelView */,
 				E378559522CCAC4A003114FD /* DottedLineView */,
 				E378559422CC667E003114FD /* EventGridLayout */,
 			);
@@ -305,6 +313,24 @@
 				E378559722CCAC64003114FD /* DottedLineView.m */,
 			);
 			path = DottedLineView;
+			sourceTree = "<group>";
+		};
+		E378559922CCD185003114FD /* TimeLabelView */ = {
+			isa = PBXGroup;
+			children = (
+				E378559A22CCD1A6003114FD /* TimeLabelView.h */,
+				E378559B22CCD1A6003114FD /* TimeLabelView.m */,
+			);
+			path = TimeLabelView;
+			sourceTree = "<group>";
+		};
+		E378559D22CCE031003114FD /* TimeLabelViewLayoutAttributes */ = {
+			isa = PBXGroup;
+			children = (
+				E378559E22CCE068003114FD /* TimeLabelViewLayoutAttributes.h */,
+				E378559F22CCE068003114FD /* TimeLabelViewLayoutAttributes.m */,
+			);
+			path = TimeLabelViewLayoutAttributes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -385,10 +411,12 @@
 				E378554122C77E82003114FD /* MainViewController.m in Sources */,
 				E378553022C76CF6003114FD /* WeeklyViewController.m in Sources */,
 				E378559822CCAC64003114FD /* DottedLineView.m in Sources */,
+				E378559C22CCD1A6003114FD /* TimeLabelView.m in Sources */,
 				E378555822C8A3DB003114FD /* WeekCollectionViewCell.m in Sources */,
 				E378559322CC6657003114FD /* EventGridLayout.m in Sources */,
 				E378556422C9DF2D003114FD /* EventStore.m in Sources */,
 				E378557A22CB43D3003114FD /* WeekCollectionView.m in Sources */,
+				E37855A022CCE068003114FD /* TimeLabelViewLayoutAttributes.m in Sources */,
 				E378554F22C7F962003114FD /* AccessDeniedView.m in Sources */,
 				E378558922CB6F8B003114FD /* EventCollectionViewCell.m in Sources */,
 				E378555322C80FAD003114FD /* UIColor+OnePtImage.m in Sources */,
