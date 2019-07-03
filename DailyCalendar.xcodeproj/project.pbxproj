@@ -32,6 +32,7 @@
 		E378559822CCAC64003114FD /* DottedLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = E378559722CCAC64003114FD /* DottedLineView.m */; };
 		E378559C22CCD1A6003114FD /* TimeLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = E378559B22CCD1A6003114FD /* TimeLabelView.m */; };
 		E37855A022CCE068003114FD /* TimeLabelViewLayoutAttributes.m in Sources */ = {isa = PBXBuildFile; fileRef = E378559F22CCE068003114FD /* TimeLabelViewLayoutAttributes.m */; };
+		E37855A622CD1DED003114FD /* CurrentTimeLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = E37855A522CD1DED003114FD /* CurrentTimeLineView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,8 @@
 		E378559E22CCE068003114FD /* TimeLabelViewLayoutAttributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimeLabelViewLayoutAttributes.h; sourceTree = "<group>"; };
 		E378559F22CCE068003114FD /* TimeLabelViewLayoutAttributes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimeLabelViewLayoutAttributes.m; sourceTree = "<group>"; };
 		E37855A122CCF730003114FD /* EventGridLayoutConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventGridLayoutConstants.h; sourceTree = "<group>"; };
+		E37855A422CD1DED003114FD /* CurrentTimeLineView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CurrentTimeLineView.h; sourceTree = "<group>"; };
+		E37855A522CD1DED003114FD /* CurrentTimeLineView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CurrentTimeLineView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +284,7 @@
 		E378558522CB6C29003114FD /* Collection View Custom Layout */ = {
 			isa = PBXGroup;
 			children = (
+				E37855A322CD1DC8003114FD /* CurrentTimeLineView */,
 				E378559D22CCE031003114FD /* TimeLabelViewLayoutAttributes */,
 				E378559922CCD185003114FD /* TimeLabelView */,
 				E378559522CCAC4A003114FD /* DottedLineView */,
@@ -333,6 +337,15 @@
 				E378559F22CCE068003114FD /* TimeLabelViewLayoutAttributes.m */,
 			);
 			path = TimeLabelViewLayoutAttributes;
+			sourceTree = "<group>";
+		};
+		E37855A322CD1DC8003114FD /* CurrentTimeLineView */ = {
+			isa = PBXGroup;
+			children = (
+				E37855A422CD1DED003114FD /* CurrentTimeLineView.h */,
+				E37855A522CD1DED003114FD /* CurrentTimeLineView.m */,
+			);
+			path = CurrentTimeLineView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -412,6 +425,7 @@
 				E378552222C76A87003114FD /* main.m in Sources */,
 				E378554122C77E82003114FD /* MainViewController.m in Sources */,
 				E378553022C76CF6003114FD /* WeeklyViewController.m in Sources */,
+				E37855A622CD1DED003114FD /* CurrentTimeLineView.m in Sources */,
 				E378559822CCAC64003114FD /* DottedLineView.m in Sources */,
 				E378559C22CCD1A6003114FD /* TimeLabelView.m in Sources */,
 				E378555822C8A3DB003114FD /* WeekCollectionViewCell.m in Sources */,

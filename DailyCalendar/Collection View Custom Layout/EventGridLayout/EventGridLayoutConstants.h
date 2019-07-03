@@ -24,3 +24,5 @@ NSString * const eventTimeAttributesKey = @"eventTimeAttributesKey";
 NSString * const eventTimeDecorationViewKind = @"eventTimeDecorationViewKind";
 NSString * const currentTimeAttributesKey = @"currentTimeAttributesKey";
 NSString * const currentTimeDecorationViewKind = @"currentTimeDecorationViewKind";
+NSString * const currentTimeLineAttributesKey = @"currentTimeLineAttributesKey";
+NSString * const currentTimeLineDecorationViewKind = @"currentTimeLineDecorationViewKind";

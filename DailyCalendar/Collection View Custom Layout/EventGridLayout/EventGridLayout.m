@@ -7,12 +7,13 @@
 //
 
 #import "EventGridLayout.h"
+#import "EventGridLayoutConstants.h"
 #import "UIColor+CustomColors.h"
 #import "UIFont+CustomFonts.h"
 #import "DottedLineView.h"
 #import "TimeLabelView.h"
 #import "TimeLabelViewLayoutAttributes.h"
-#import "EventGridLayoutConstants.h"
+#import "CurrentTimeLineView.h"
 
 @interface EventGridLayout ()
 
@@ -28,18 +29,17 @@
 {
     self = [super initWithCoder:coder];
     if (self) {
-        [self registerDecorationClasses];
+        [self registerClass:[DottedLineView class] forDecorationViewOfKind:dottedLineDecorationViewKind];
+        [self registerClass:[TimeLabelView class] forDecorationViewOfKind:sectionTimeDecorationViewKind];
+        [self registerClass:[TimeLabelView class] forDecorationViewOfKind:eventTimeDecorationViewKind];
+        //[self registerClass:[TimeLabelView class] forDecorationViewOfKind:currentTimeDecorationViewKind];
+        [self registerClass:[CurrentTimeLineView class] forDecorationViewOfKind:currentTimeLineDecorationViewKind];
+        
+        NSDate *nextMinuteDate =  [[NSCalendar currentCalendar] nextDateAfterDate:[NSDate date] matchingUnit:NSCalendarUnitSecond value:0 options:NSCalendarMatchNextTime];
+        NSTimer *minuteTimer = [[NSTimer alloc] initWithFireDate:nextMinuteDate interval:60 target:self selector:@selector(timeChanged) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:minuteTimer forMode:NSDefaultRunLoopMode];
     }
     return self;
-}
-
-#pragma mark - Private
-
-- (void)registerDecorationClasses {
-    [self registerClass:[DottedLineView class] forDecorationViewOfKind:dottedLineDecorationViewKind];
-    [self registerClass:[TimeLabelView class] forDecorationViewOfKind:sectionTimeDecorationViewKind];
-    [self registerClass:[TimeLabelView class] forDecorationViewOfKind:eventTimeDecorationViewKind];
-    //[self registerClass:[TimeLabelView class] forDecorationViewOfKind:currentTimeDecorationViewKind];
 }
 
 #pragma mark - UICollectionViewLayout
@@ -68,6 +68,10 @@
         NSArray *eventTimesAttributes = [self prepareEventTimesAttributes];
         [self.attributesCache setObject:eventTimesAttributes forKey:eventTimeAttributesKey];
     }
+    if (![self.attributesCache objectForKey:currentTimeLineAttributesKey]) {
+        NSArray *currentTimeLineAttributes = [self prepareCurrentTimeLineAttributes];
+        [self.attributesCache setObject:currentTimeLineAttributes forKey:currentTimeLineAttributesKey];
+    }
 }
 
 - (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -81,6 +85,8 @@
     [allAttributes addObjectsFromArray:sectionTimesAttributes];
     NSArray *eventTimesAttributes = [self.attributesCache objectForKey:eventTimeAttributesKey];
     [allAttributes addObjectsFromArray:eventTimesAttributes];
+    NSArray *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
+    [allAttributes addObjectsFromArray:currentTimeLineAttributes];
     for (UICollectionViewLayoutAttributes *attributes in allAttributes) {
         if (CGRectIntersectsRect(attributes.frame, rect)) {
             [rectAttributes addObject:attributes];
@@ -95,6 +101,12 @@
 }
 
 #pragma mark - Private
+
+- (void)timeChanged {
+    //TODO: invalidate layout only for currentTimeLineView
+    //[self.attributesCache removeObjectForKey:currentTimeLineAttributesKey];
+    [self invalidateLayout];
+}
 
 - (NSArray *)prepareItemsAttributes {
     NSMutableArray *itemsAttributes = [NSMutableArray array];
@@ -170,6 +182,19 @@
         }
     }
     return [timesAttributes copy];
+}
+
+- (NSArray *)prepareCurrentTimeLineAttributes {
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
+    UICollectionViewLayoutAttributes *lineAttributes = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:currentTimeLineDecorationViewKind withIndexPath:indexPath];
+    NSDate *today = [NSDate date];
+    NSDate *startOfDay = [[NSCalendar currentCalendar] startOfDayForDate:today];
+    NSInteger start = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:startOfDay toDate:today options:0].minute;
+    CGFloat lineY = 1.0 * start / minutesInSection * sectionHeight;
+    CGRect viewFrame = CGRectMake(xOffset, lineY, self.collectionView.bounds.size.width - xOffset, 1);
+    lineAttributes.frame = viewFrame;
+    lineAttributes.zIndex = decorationZIndex;
+    return @[lineAttributes];
 }
 
 @end
