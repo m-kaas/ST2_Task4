@@ -11,12 +11,29 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class WeekCollectionView;
+
+@protocol WeekCollectionViewDataSource <NSObject>
+
+- (NSInteger)numberOfWeeksInWeekCollectionView:(WeekCollectionView *)weekCollectionView;
+- (NSDate *)startDateForWeekCollectionView:(WeekCollectionView *)weekCollectionView;
+- (BOOL)weekCollectionView:(WeekCollectionView *)weekCollectionView hasEventsForDate:(NSDate *)eventDate;
+
+@end
+
+@protocol WeekCollectionViewDelegate <NSObject>
+
+- (void)weekCollectionView:(WeekCollectionView *)weekCollectionView didSelectDateAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
 @interface WeekCollectionView : UIView
 
-@property (strong, nonatomic) EventStore *eventStore;
-@property (strong, nonatomic) NSDate *selectedDate;
+@property (weak, nonatomic) id<WeekCollectionViewDataSource> dataSource;
+@property (weak, nonatomic) id<WeekCollectionViewDelegate> delegate;
 
 - (void)reloadData;
+- (void)selectToday;
 
 @end
 

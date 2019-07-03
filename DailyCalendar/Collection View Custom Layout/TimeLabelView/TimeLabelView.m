@@ -25,9 +25,9 @@
     self.timeLabel = label;
     self.timeLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[[self.timeLabel.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-                                              [self.timeLabel.topAnchor constraintEqualToAnchor:self.topAnchor],
-                                              [self.trailingAnchor constraintEqualToAnchor:self.timeLabel.trailingAnchor],
-                                              [self.bottomAnchor constraintEqualToAnchor:self.timeLabel.bottomAnchor]]];
+        [self.timeLabel.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [self.trailingAnchor constraintEqualToAnchor:self.timeLabel.trailingAnchor],
+        [self.bottomAnchor constraintEqualToAnchor:self.timeLabel.bottomAnchor]]];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame

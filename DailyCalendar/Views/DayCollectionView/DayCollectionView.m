@@ -21,6 +21,8 @@ NSString * const eventCellId = @"eventCellId";
 
 @implementation DayCollectionView
 
+#pragma mark - Lifecycle
+
 - (void)loadXibFile {
     UIView *view = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
     [self addSubview:view];
@@ -47,13 +49,15 @@ NSString * const eventCellId = @"eventCellId";
     return self;
 }
 
-- (void)reloadData {
-    [self.collectionView reloadData];
-}
-
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [self.eventGridLayout invalidateLayout];
     //TODO: scroll to the start of the week without decelerating
+}
+
+#pragma mark - Public
+
+- (void)reloadData {
+    [self.collectionView reloadData];
 }
 
 #pragma mark - UICollectionViewDataSource

@@ -78,6 +78,7 @@
 		E378559B22CCD1A6003114FD /* TimeLabelView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimeLabelView.m; sourceTree = "<group>"; };
 		E378559E22CCE068003114FD /* TimeLabelViewLayoutAttributes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TimeLabelViewLayoutAttributes.h; sourceTree = "<group>"; };
 		E378559F22CCE068003114FD /* TimeLabelViewLayoutAttributes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TimeLabelViewLayoutAttributes.m; sourceTree = "<group>"; };
+		E37855A122CCF730003114FD /* EventGridLayoutConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventGridLayoutConstants.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,7 +117,7 @@
 				E378551322C76A82003114FD /* AppDelegate.m */,
 				E378556022C9DEFC003114FD /* Models */,
 				E378553522C779BC003114FD /* Categories */,
-				E378558522CB6C29003114FD /* CollectionViewCustomLayout */,
+				E378558522CB6C29003114FD /* Collection View Custom Layout */,
 				E378554222C78D4F003114FD /* Views */,
 				E378552B22C76CB4003114FD /* View Controllers */,
 				E378552822C76AA4003114FD /* Resources */,
@@ -277,7 +278,7 @@
 			path = DayCollectionView;
 			sourceTree = "<group>";
 		};
-		E378558522CB6C29003114FD /* CollectionViewCustomLayout */ = {
+		E378558522CB6C29003114FD /* Collection View Custom Layout */ = {
 			isa = PBXGroup;
 			children = (
 				E378559D22CCE031003114FD /* TimeLabelViewLayoutAttributes */,
@@ -285,7 +286,7 @@
 				E378559522CCAC4A003114FD /* DottedLineView */,
 				E378559422CC667E003114FD /* EventGridLayout */,
 			);
-			path = CollectionViewCustomLayout;
+			path = "Collection View Custom Layout";
 			sourceTree = "<group>";
 		};
 		E378558622CB6F54003114FD /* EventCollectionViewCell */ = {
@@ -300,6 +301,7 @@
 		E378559422CC667E003114FD /* EventGridLayout */ = {
 			isa = PBXGroup;
 			children = (
+				E37855A122CCF730003114FD /* EventGridLayoutConstants.h */,
 				E378559122CC6657003114FD /* EventGridLayout.h */,
 				E378559222CC6657003114FD /* EventGridLayout.m */,
 			);

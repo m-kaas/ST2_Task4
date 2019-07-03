@@ -18,6 +18,8 @@
 
 @implementation EventCollectionViewCell
 
+#pragma mark - Lifecycle
+
 - (void)commonInit {
     self.layer.cornerRadius = 3;
     UILabel *label = [UILabel new];
@@ -57,8 +59,10 @@
     self.eventTitleLabel.text = @"";
 }
 
+#pragma mark - Custom Accessors
+
 - (void)setEvent:(EKEvent *)event {
-    if (![_event isEqual:event]) {
+    if (_event != event) {
         _event = event;
     }
     UIColor *calendarColor = [UIColor colorWithCGColor:event.calendar.CGColor];

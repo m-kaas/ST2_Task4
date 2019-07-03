@@ -21,6 +21,8 @@
 
 @implementation WeekCollectionViewCell
 
+#pragma mark - Lifecycle
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     self.dateLabel.textColor = [UIColor customWhiteColor];
@@ -35,6 +37,8 @@
     self.hasEvents = false;
     self.selected = NO;
 }
+
+#pragma mark - Custom Accessors
 
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
@@ -56,7 +60,7 @@
 }
 
 - (void)setDate:(NSDate *)date {
-    if (![_date isEqualToDate:date]) {
+    if (_date != date) {
         _date = date;
     }
     NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:date];

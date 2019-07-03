@@ -40,11 +40,10 @@ const NSInteger numberOfDaysInWeek = 7;
 
 - (void)loadEventsFromDate:(NSDate *)startDate toDate:(NSDate *)endDate {
     NSCalendar *currentCalendar = [NSCalendar currentCalendar];
-    NSDateComponents *components = [NSDateComponents new];
-    components.day = -[currentCalendar ordinalityOfUnit:NSCalendarUnitWeekday inUnit:NSCalendarUnitWeekOfYear forDate:startDate] + 1;
-    self.startDate = [currentCalendar startOfDayForDate:[currentCalendar dateByAddingComponents:components toDate:startDate options:0]];
-    components.day = numberOfDaysInWeek - [currentCalendar ordinalityOfUnit:NSCalendarUnitWeekday inUnit:NSCalendarUnitWeekOfYear forDate:endDate] + 1;
-    self.endDate = [currentCalendar startOfDayForDate:[currentCalendar dateByAddingComponents:components toDate:endDate options:0]];
+    NSInteger days = -[currentCalendar ordinalityOfUnit:NSCalendarUnitWeekday inUnit:NSCalendarUnitWeekOfYear forDate:startDate] + 1;
+    self.startDate = [currentCalendar startOfDayForDate:[currentCalendar dateByAddingUnit:NSCalendarUnitDay value:days toDate:startDate options:0]];
+    days = numberOfDaysInWeek - [currentCalendar ordinalityOfUnit:NSCalendarUnitWeekday inUnit:NSCalendarUnitWeekOfYear forDate:endDate] + 1;
+    self.endDate = [currentCalendar startOfDayForDate:[currentCalendar dateByAddingUnit:NSCalendarUnitDay value:days toDate:endDate options:0]];
     self.numberOfDays = [currentCalendar components:NSCalendarUnitDay fromDate:self.startDate toDate:self.endDate options:0].day;
     self.numberOfWeeks = self.numberOfDays / numberOfDaysInWeek;
     [self fetchEvents];

@@ -12,25 +12,7 @@
 #import "DottedLineView.h"
 #import "TimeLabelView.h"
 #import "TimeLabelViewLayoutAttributes.h"
-
-const CGFloat sectionHeight = 35.0;
-const CGFloat xOffset = 55.0;
-const NSInteger numberOfHours = 24;
-const NSInteger minutesInSection = 15;
-const NSInteger minutesInHour = 60;
-const NSInteger numberOfSectionsInHour = minutesInHour / minutesInSection;
-const NSInteger numberOfSections = numberOfHours * numberOfSectionsInHour;
-const NSInteger itemZIndex = 1;
-const NSInteger decorationZIndex = 0;
-NSString * const itemAttributesKey = @"itemAttributesKey";
-NSString * const dottedLineAttributesKey = @"dottedLineAttributesKey";
-NSString * const dottedLineDecorationViewKind = @"dottedLineDecorationViewKind";
-NSString * const sectionTimeAttributesKey = @"sectionTimeAttributesKey";
-NSString * const sectionTimeDecorationViewKind = @"sectionTimeDecorationViewKind";
-NSString * const eventTimeAttributesKey = @"eventTimeAttributesKey";
-NSString * const eventTimeDecorationViewKind = @"eventTimeDecorationViewKind";
-NSString * const currentTimeAttributesKey = @"currentTimeAttributesKey";
-NSString * const currentTimeDecorationViewKind = @"currentTimeDecorationViewKind";
+#import "EventGridLayoutConstants.h"
 
 @interface EventGridLayout ()
 
@@ -39,15 +21,8 @@ NSString * const currentTimeDecorationViewKind = @"currentTimeDecorationViewKind
 @end
 
 @implementation EventGridLayout
-//TODO: add separate file for constants
 
-- (void)registerDecorationClasses {
-    //TODO: enum for decoration view kinds
-    [self registerClass:[DottedLineView class] forDecorationViewOfKind:dottedLineDecorationViewKind];
-    [self registerClass:[TimeLabelView class] forDecorationViewOfKind:sectionTimeDecorationViewKind];
-    [self registerClass:[TimeLabelView class] forDecorationViewOfKind:eventTimeDecorationViewKind];
-    //[self registerClass:[TimeLabelView class] forDecorationViewOfKind:currentTimeDecorationViewKind];
-}
+#pragma mark - Lifecycle
 
 - (instancetype)initWithCoder:(NSCoder *)coder
 {
@@ -57,6 +32,17 @@ NSString * const currentTimeDecorationViewKind = @"currentTimeDecorationViewKind
     }
     return self;
 }
+
+#pragma mark - Private
+
+- (void)registerDecorationClasses {
+    [self registerClass:[DottedLineView class] forDecorationViewOfKind:dottedLineDecorationViewKind];
+    [self registerClass:[TimeLabelView class] forDecorationViewOfKind:sectionTimeDecorationViewKind];
+    [self registerClass:[TimeLabelView class] forDecorationViewOfKind:eventTimeDecorationViewKind];
+    //[self registerClass:[TimeLabelView class] forDecorationViewOfKind:currentTimeDecorationViewKind];
+}
+
+#pragma mark - UICollectionViewLayout
 
 - (CGSize)collectionViewContentSize {
     return CGSizeMake(self.collectionView.bounds.size.width, numberOfSections * sectionHeight);
@@ -83,6 +69,32 @@ NSString * const currentTimeDecorationViewKind = @"currentTimeDecorationViewKind
         [self.attributesCache setObject:eventTimesAttributes forKey:eventTimeAttributesKey];
     }
 }
+
+- (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {
+    NSMutableArray *rectAttributes = [NSMutableArray array];
+    NSMutableArray *allAttributes = [NSMutableArray array];
+    NSArray *itemsAttributes = [self.attributesCache objectForKey:itemAttributesKey];
+    [allAttributes addObjectsFromArray:itemsAttributes];
+    NSArray *dottedLinesAttributes = [self.attributesCache objectForKey:dottedLineAttributesKey];
+    [allAttributes addObjectsFromArray:dottedLinesAttributes];
+    NSArray *sectionTimesAttributes = [self.attributesCache objectForKey:sectionTimeAttributesKey];
+    [allAttributes addObjectsFromArray:sectionTimesAttributes];
+    NSArray *eventTimesAttributes = [self.attributesCache objectForKey:eventTimeAttributesKey];
+    [allAttributes addObjectsFromArray:eventTimesAttributes];
+    for (UICollectionViewLayoutAttributes *attributes in allAttributes) {
+        if (CGRectIntersectsRect(attributes.frame, rect)) {
+            [rectAttributes addObject:attributes];
+        }
+    }
+    return [rectAttributes copy];
+}
+
+- (void)invalidateLayout {
+    [super invalidateLayout];
+    [self.attributesCache removeAllObjects];
+}
+
+#pragma mark - Private
 
 - (NSArray *)prepareItemsAttributes {
     NSMutableArray *itemsAttributes = [NSMutableArray array];
@@ -158,30 +170,6 @@ NSString * const currentTimeDecorationViewKind = @"currentTimeDecorationViewKind
         }
     }
     return [timesAttributes copy];
-}
-
-- (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {
-    NSMutableArray *rectAttributes = [NSMutableArray array];
-    NSMutableArray *allAttributes = [NSMutableArray array];
-    NSArray *itemsAttributes = [self.attributesCache objectForKey:itemAttributesKey];
-    [allAttributes addObjectsFromArray:itemsAttributes];
-    NSArray *dottedLinesAttributes = [self.attributesCache objectForKey:dottedLineAttributesKey];
-    [allAttributes addObjectsFromArray:dottedLinesAttributes];
-    NSArray *sectionTimesAttributes = [self.attributesCache objectForKey:sectionTimeAttributesKey];
-    [allAttributes addObjectsFromArray:sectionTimesAttributes];
-    NSArray *eventTimesAttributes = [self.attributesCache objectForKey:eventTimeAttributesKey];
-    [allAttributes addObjectsFromArray:eventTimesAttributes];
-    for (UICollectionViewLayoutAttributes *attributes in allAttributes) {
-        if (CGRectIntersectsRect(attributes.frame, rect)) {
-            [rectAttributes addObject:attributes];
-        }
-    }
-    return [rectAttributes copy];
-}
-
-- (void)invalidateLayout {
-    [super invalidateLayout];
-    [self.attributesCache removeAllObjects];
 }
 
 @end

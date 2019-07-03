@@ -23,6 +23,8 @@ NSString * const dayCellId = @"dayCellId";
 
 @implementation WeekCollectionView
 
+#pragma mark - Lifecycle
+
 - (void)loadXibFile {
     UIView *view = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
     [self addSubview:view];
@@ -56,15 +58,35 @@ NSString * const dayCellId = @"dayCellId";
     //TODO: scroll to the start of the week without decelerating
 }
 
+#pragma mark - Public
+
 - (void)reloadData {
     [self.collectionView reloadData];
+}
+
+#pragma mark - Private
+
+- (void)selectToday {
+    if ([self.dataSource respondsToSelector:@selector(startDateForWeekCollectionView:)]) {
+        NSDate *startDate = [self.dataSource startDateForWeekCollectionView:self];
+        NSInteger days = [[NSCalendar currentCalendar] components:NSCalendarUnitDay fromDate:startDate toDate:[NSDate date] options:0].day;
+        NSInteger item = days % numberOfDaysInWeek;
+        NSInteger section = days / numberOfDaysInWeek;
+        NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForItem:item inSection:section];
+        NSIndexPath *scrolledIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
+        [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+        [self.collectionView selectItemAtIndexPath:selectedIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+    }
 }
 
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    //return [self.dataSource numberOfWeeksInWeekCollectionView:self];
-    return self.eventStore.numberOfWeeks;
+    NSInteger numberOfWeeks = 0;
+    if ([self.dataSource respondsToSelector:@selector(numberOfWeeksInWeekCollectionView:)]) {
+        numberOfWeeks = [self.dataSource numberOfWeeksInWeekCollectionView:self];
+    }
+    return numberOfWeeks;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -73,12 +95,15 @@ NSString * const dayCellId = @"dayCellId";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     WeekCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:dayCellId forIndexPath:indexPath];
-    NSInteger days = indexPath.section * numberOfDaysInWeek + indexPath.item;
-    //NSDate *startDate = [self.dataSource startDateForWeekCollectionView:self];
-    NSDate *eventDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:days toDate:self.eventStore.startDate options:0];
-    cell.date = eventDate;
-    //BOOL hasEvents = [self.dataSource weekCollectionView:self hasEventsForDate:eventDate];
-    cell.hasEvents = [self.eventStore hasEventsForDate:eventDate];
+    if ([self.dataSource respondsToSelector:@selector(startDateForWeekCollectionView:)] &&
+        [self.dataSource respondsToSelector:@selector(weekCollectionView:hasEventsForDate:)]) {
+        NSInteger days = indexPath.section * numberOfDaysInWeek + indexPath.item;
+        NSDate *startDate = [self.dataSource startDateForWeekCollectionView:self];
+        NSDate *eventDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:days toDate:startDate options:0];
+        cell.date = eventDate;
+        BOOL hasEvents = [self.dataSource weekCollectionView:self hasEventsForDate:eventDate];
+        cell.hasEvents = hasEvents;
+    }
     cell.layer.cornerRadius = cell.bounds.size.width / 2;
     return cell;
 }
@@ -86,7 +111,9 @@ NSString * const dayCellId = @"dayCellId";
 #pragma mark - UICollectionViewDelegate
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    
+    if ([self.delegate respondsToSelector:@selector(weekCollectionView:didSelectDateAtIndexPath:)]) {
+        [self.delegate weekCollectionView:self didSelectDateAtIndexPath:indexPath];
+    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
@@ -98,15 +125,11 @@ NSString * const dayCellId = @"dayCellId";
         direction = 1;
     }
     self.lastContentOffset = newContentOffset;
-    NSDateComponents *week = [NSDateComponents new];
-    week.day = numberOfDaysInWeek * direction;
-    NSDate *newSelectedDate = [[NSCalendar currentCalendar] dateByAddingComponents:week toDate:self.selectedDate options:0];
-    self.selectedDate = newSelectedDate;
-    //TODO: notify about selection
     NSIndexPath *selectedIndexPath = self.collectionView.indexPathsForSelectedItems.firstObject;
     if (selectedIndexPath) {
         NSIndexPath *newSelectedIndexPath = [NSIndexPath indexPathForItem:selectedIndexPath.item inSection:(selectedIndexPath.section + direction)];
         [self.collectionView selectItemAtIndexPath:newSelectedIndexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
+        [self collectionView:self.collectionView didSelectItemAtIndexPath:newSelectedIndexPath];
     }
 }
 
