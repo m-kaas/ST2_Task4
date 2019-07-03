@@ -13,6 +13,7 @@ const NSInteger numberOfDaysInWeek = 7;
 
 @interface EventStore ()
 
+@property (strong, nonatomic) EKEventStore *eventStore;
 @property (strong, nonatomic) NSMutableDictionary *eventsByDate;
 @property (strong, nonatomic, readwrite) NSDate *startDate;
 @property (strong, nonatomic, readwrite) NSDate *endDate;
@@ -50,9 +51,11 @@ const NSInteger numberOfDaysInWeek = 7;
 }
 
 - (void)fetchEvents {
-    EKEventStore *store = [EKEventStore new];
-    NSPredicate *eventsPredicate = [store predicateForEventsWithStartDate:self.startDate endDate:self.endDate calendars:nil];
-    [store enumerateEventsMatchingPredicate:eventsPredicate usingBlock:^(EKEvent * _Nonnull event, BOOL * _Nonnull stop) {
+    if (!self.eventStore) {
+        self.eventStore = [EKEventStore new];
+    }
+    NSPredicate *eventsPredicate = [self.eventStore predicateForEventsWithStartDate:self.startDate endDate:self.endDate calendars:nil];
+    [self.eventStore enumerateEventsMatchingPredicate:eventsPredicate usingBlock:^(EKEvent * _Nonnull event, BOOL * _Nonnull stop) {
         [self addEvent:event];
     }];
 }

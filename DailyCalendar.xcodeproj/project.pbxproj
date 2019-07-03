@@ -29,6 +29,7 @@
 		E378558422CB6783003114FD /* DayCollectionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = E378558322CB6783003114FD /* DayCollectionView.xib */; };
 		E378558922CB6F8B003114FD /* EventCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = E378558822CB6F8B003114FD /* EventCollectionViewCell.m */; };
 		E378559322CC6657003114FD /* EventGridLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = E378559222CC6657003114FD /* EventGridLayout.m */; };
+		E378559822CCAC64003114FD /* DottedLineView.m in Sources */ = {isa = PBXBuildFile; fileRef = E378559722CCAC64003114FD /* DottedLineView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +70,8 @@
 		E378558822CB6F8B003114FD /* EventCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventCollectionViewCell.m; sourceTree = "<group>"; };
 		E378559122CC6657003114FD /* EventGridLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EventGridLayout.h; sourceTree = "<group>"; };
 		E378559222CC6657003114FD /* EventGridLayout.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EventGridLayout.m; sourceTree = "<group>"; };
+		E378559622CCAC64003114FD /* DottedLineView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DottedLineView.h; sourceTree = "<group>"; };
+		E378559722CCAC64003114FD /* DottedLineView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DottedLineView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +274,7 @@
 		E378558522CB6C29003114FD /* CollectionViewCustomLayout */ = {
 			isa = PBXGroup;
 			children = (
+				E378559522CCAC4A003114FD /* DottedLineView */,
 				E378559422CC667E003114FD /* EventGridLayout */,
 			);
 			path = CollectionViewCustomLayout;
@@ -292,6 +296,15 @@
 				E378559222CC6657003114FD /* EventGridLayout.m */,
 			);
 			path = EventGridLayout;
+			sourceTree = "<group>";
+		};
+		E378559522CCAC4A003114FD /* DottedLineView */ = {
+			isa = PBXGroup;
+			children = (
+				E378559622CCAC64003114FD /* DottedLineView.h */,
+				E378559722CCAC64003114FD /* DottedLineView.m */,
+			);
+			path = DottedLineView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -371,6 +384,7 @@
 				E378552222C76A87003114FD /* main.m in Sources */,
 				E378554122C77E82003114FD /* MainViewController.m in Sources */,
 				E378553022C76CF6003114FD /* WeeklyViewController.m in Sources */,
+				E378559822CCAC64003114FD /* DottedLineView.m in Sources */,
 				E378555822C8A3DB003114FD /* WeekCollectionViewCell.m in Sources */,
 				E378559322CC6657003114FD /* EventGridLayout.m in Sources */,
 				E378556422C9DF2D003114FD /* EventStore.m in Sources */,

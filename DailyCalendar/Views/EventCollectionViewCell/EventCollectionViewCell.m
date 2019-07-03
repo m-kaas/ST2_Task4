@@ -21,11 +21,15 @@
 - (void)commonInit {
     self.layer.cornerRadius = 3;
     UILabel *label = [UILabel new];
-    [self addSubview:label];
+    [self.contentView addSubview:label];
     self.eventTitleLabel = label;
-    self.eventTitleLabel.frame = self.bounds;
     self.eventTitleLabel.textColor = [UIColor customBlackColor];
     self.eventTitleLabel.font = [UIFont system17MediumFont];
+    self.eventTitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[[self.eventTitleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
+                                              [self.eventTitleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
+                                              [self.contentView.trailingAnchor constraintEqualToAnchor:self.eventTitleLabel.trailingAnchor],
+                                              [self.contentView.bottomAnchor constraintEqualToAnchor:self.eventTitleLabel.bottomAnchor]]];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -47,7 +51,7 @@
 }
 
 - (void)prepareForReuse {
-    //self.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = [UIColor clearColor];
     self.eventTitleLabel.text = @"";
 }
 
@@ -55,8 +59,11 @@
     if (![_event isEqual:event]) {
         _event = event;
     }
-    UIColor *calendarColor = [UIColor colorWithCGColor:self.event.calendar.CGColor];
-    //self.backgroundColor = [calendarColor colorWithAlphaComponent:0.5];
+    UIColor *calendarColor = [UIColor colorWithCGColor:event.calendar.CGColor];
+    if (!calendarColor) {
+        calendarColor = [UIColor customRedColor];
+    }
+    self.backgroundColor = [calendarColor colorWithAlphaComponent:0.5];
     self.eventTitleLabel.text = event.title;
 }
 

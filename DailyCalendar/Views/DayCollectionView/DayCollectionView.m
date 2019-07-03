@@ -25,7 +25,6 @@ NSString * const eventCellId = @"eventCellId";
     UIView *view = [[[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:self options:nil] firstObject];
     [self addSubview:view];
     view.frame = self.bounds;
-    self.collectionView.backgroundColor = [UIColor lightGrayColor];
     [self.collectionView registerClass:[EventCollectionViewCell class] forCellWithReuseIdentifier:eventCellId];
     self.eventGridLayout.dataSource = self;
 }
@@ -52,6 +51,11 @@ NSString * const eventCellId = @"eventCellId";
     [self.collectionView reloadData];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [self.eventGridLayout invalidateLayout];
+    //TODO: scroll to the start of the week without decelerating
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -59,17 +63,14 @@ NSString * const eventCellId = @"eventCellId";
     if ([self.dataSource respondsToSelector:@selector(numberOfEventsInDayCollectionView:)]) {
         numberOfEvents = [self.dataSource numberOfEventsInDayCollectionView:self];
     }
-    NSLog(@"number of events %ld", numberOfEvents);
     return numberOfEvents;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSArray *colors = @[[UIColor redColor], [UIColor blueColor], [UIColor greenColor], [UIColor yellowColor]];
     EventCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:eventCellId forIndexPath:indexPath];
     if ([self.dataSource respondsToSelector:@selector(dayCollectionView:eventForItemAtIndexPath:)]) {
         cell.event = [self.dataSource dayCollectionView:self eventForItemAtIndexPath:indexPath];
     }
-    cell.backgroundColor = colors[indexPath.item];
     return cell;
 }
 
