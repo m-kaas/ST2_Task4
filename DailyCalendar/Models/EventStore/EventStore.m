@@ -66,4 +66,20 @@ const NSInteger numberOfDaysInWeek = 7;
     return events;
 }
 
+- (BOOL)hasEventsForDate:(NSDate *)date {
+    NSDate *startDate = [[NSCalendar currentCalendar] startOfDayForDate:date];
+    BOOL hasEvents = [self.eventsByDate.allKeys containsObject:startDate];
+    return hasEvents;
+}
+
+- (NSInteger)numberOfEventsForDate:(NSDate *)date {
+    NSInteger numberOfEvents = 0;
+    NSDate *startDate = [[NSCalendar currentCalendar] startOfDayForDate:date];
+    if ([self.eventsByDate.allKeys containsObject:startDate]) {
+        NSArray *events = self.eventsByDate[startDate];
+        numberOfEvents = events.count;
+    }
+    return numberOfEvents;
+}
+
 @end

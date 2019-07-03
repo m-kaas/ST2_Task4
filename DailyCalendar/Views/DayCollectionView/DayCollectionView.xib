@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="DayCollectionView">
+            <connections>
+                <outlet property="collectionView" destination="g3D-FN-HkW" id="UR2-dl-nXR"/>
+                <outlet property="eventGridLayout" destination="us9-QU-eXb" id="d36-02-LYQ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="430" height="591"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="g3D-FN-HkW">
+                    <rect key="frame" x="0.0" y="44" width="430" height="513"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <collectionViewLayout key="collectionViewLayout" id="us9-QU-eXb" customClass="EventGridLayout"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="R24-lq-2eC"/>
+                    </connections>
+                </collectionView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="g3D-FN-HkW" secondAttribute="trailing" id="DQ7-XX-eVo"/>
+                <constraint firstItem="g3D-FN-HkW" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="L9S-Oi-nL2"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="g3D-FN-HkW" secondAttribute="bottom" id="lps-Ko-Cqr"/>
+                <constraint firstItem="g3D-FN-HkW" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="uNL-vg-fx9"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <point key="canvasLocation" x="59.420289855072468" y="137.61160714285714"/>
+        </view>
+    </objects>
+</document>

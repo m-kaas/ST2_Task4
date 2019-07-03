@@ -1,16 +1,16 @@
 //
-//  WeeklyCollectionViewCell.m
+//  WeekCollectionViewCell.m
 //  DailyCalendar
 //
 //  Created by Liubou Sakalouskaya on 6/30/19.
 //  Copyright © 2019 Liubou Sakalouskaya. All rights reserved.
 //
 
-#import "WeeklyCollectionViewCell.h"
+#import "WeekCollectionViewCell.h"
 #import "UIColor+CustomColors.h"
 #import "UIFont+CustomFonts.h"
 
-@interface WeeklyCollectionViewCell ()
+@interface WeekCollectionViewCell ()
 
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UILabel *dayLabel;
@@ -19,7 +19,7 @@
 
 @end
 
-@implementation WeeklyCollectionViewCell
+@implementation WeekCollectionViewCell
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -31,6 +31,7 @@
 }
 
 - (void)prepareForReuse {
+    [super prepareForReuse];
     self.hasEvents = false;
     self.selected = NO;
 }
@@ -45,6 +46,7 @@
 }
 
 - (void)setHasEvents:(BOOL)hasEvents {
+    //TODO: move hasEvents to VC
     _hasEvents = hasEvents;
     if (hasEvents) {
         self.dotLabel.textColor = [UIColor customWhiteColor];

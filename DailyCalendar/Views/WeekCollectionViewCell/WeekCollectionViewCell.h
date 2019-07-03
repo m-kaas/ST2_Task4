@@ -1,5 +1,5 @@
 //
-//  WeeklyCollectionViewCell.h
+//  WeekCollectionViewCell.h
 //  DailyCalendar
 //
 //  Created by Liubou Sakalouskaya on 6/30/19.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface WeeklyCollectionViewCell : UICollectionViewCell
+@interface WeekCollectionViewCell : UICollectionViewCell
 
 @property (strong, nonatomic) NSDate *date;
 @property (assign, nonatomic) BOOL hasEvents;

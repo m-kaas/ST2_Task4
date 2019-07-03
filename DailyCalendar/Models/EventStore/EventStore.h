@@ -20,5 +20,7 @@ extern const NSInteger numberOfDaysInWeek;
 - (void)addEvent:(EKEvent *)event;
 - (void)loadEventsFromDate:(NSDate *)startDate toDate:(NSDate *)endDate;
 - (NSArray *)eventsForDate:(NSDate *)date;
+- (BOOL)hasEventsForDate:(NSDate *)date;
+- (NSInteger)numberOfEventsForDate:(NSDate *)date;
 
 @end
