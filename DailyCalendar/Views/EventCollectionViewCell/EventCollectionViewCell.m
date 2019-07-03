@@ -25,11 +25,12 @@
     self.eventTitleLabel = label;
     self.eventTitleLabel.textColor = [UIColor customBlackColor];
     self.eventTitleLabel.font = [UIFont system17MediumFont];
+    self.eventTitleLabel.numberOfLines = 0;
     self.eventTitleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[[self.eventTitleLabel.leadingAnchor constraintEqualToAnchor:self.contentView.leadingAnchor],
                                               [self.eventTitleLabel.topAnchor constraintEqualToAnchor:self.contentView.topAnchor],
                                               [self.contentView.trailingAnchor constraintEqualToAnchor:self.eventTitleLabel.trailingAnchor],
-                                              [self.contentView.bottomAnchor constraintEqualToAnchor:self.eventTitleLabel.bottomAnchor]]];
+                                              [self.contentView.bottomAnchor constraintGreaterThanOrEqualToAnchor:self.eventTitleLabel.bottomAnchor]]];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame

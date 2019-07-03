@@ -34,7 +34,7 @@
     self.dayView.dataSource = self;
     self.eventStore = [EventStore new];
     EKEventStore *store = [EKEventStore new];
-    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(fetchEvents) name:EKEventStoreChangedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateEvents) name:EKEventStoreChangedNotification object:nil];
     [store requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError * _Nullable error) {
         if (granted) {
             [self setupCalendarInfo];
@@ -53,7 +53,18 @@
 
 - (void)dealloc
 {
-    //[[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)updateEvents {
+    [self.eventStore reloadEvents];
+    //TODO: handle eventStore and selectedDate somehow else, e.g. eventStore -> dataSource
+    self.weekView.eventStore = self.eventStore;
+    self.weekView.selectedDate = self.selectedDate;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.dayView reloadData];
+        [self.weekView reloadData];
+    });
 }
 
 - (void)setupCalendarInfo {

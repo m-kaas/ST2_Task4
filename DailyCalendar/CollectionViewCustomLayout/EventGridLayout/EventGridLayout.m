@@ -25,6 +25,7 @@ NSString * const dottedLineDecorationViewKind = @"dottedLineDecorationViewKind";
 @end
 
 @implementation EventGridLayout
+//TODO: add separate file for constants
 
 - (void)registerDecorationClasses {
     //TODO: enum for decoration view kinds
@@ -49,39 +50,49 @@ NSString * const dottedLineDecorationViewKind = @"dottedLineDecorationViewKind";
         self.attributesCache = [NSCache new];
     }
     if (![self.attributesCache objectForKey:itemsAttributesKey]) {
-        NSMutableArray *itemsAttributes = [NSMutableArray array];
-        if ([self.dataSource respondsToSelector:@selector(durationOfEventAtIndexPath:)] &&
-            [self.dataSource respondsToSelector:@selector(startOfEventAtIndexPath:)]) {
-            for (int i = 0; i < [self.collectionView numberOfItemsInSection:0]; i++) {
-                NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
-                NSInteger minutes = [self.dataSource durationOfEventAtIndexPath:indexPath];
-                CGFloat itemHeight = minutes / minutesInSection * sectionHeight;
-                NSInteger start = [self.dataSource startOfEventAtIndexPath:indexPath];
-                CGFloat itemY = start / minutesInSection * sectionHeight;
-                if (itemY + itemHeight > self.collectionView.contentSize.height) {
-                    itemHeight = self.collectionView.contentSize.height - itemY;
-                }
-                CGRect itemFrame = CGRectMake(0, itemY, self.collectionView.bounds.size.width, itemHeight);
-                UICollectionViewLayoutAttributes *attr = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
-                attr.frame = itemFrame;
-                attr.zIndex = itemZIndex;
-                [itemsAttributes addObject:attr];
-            }
-        }
+        NSArray *itemsAttributes = [self prepareItemsAttributes];
         [self.attributesCache setObject:itemsAttributes forKey:itemsAttributesKey];
     }
     if (![self.attributesCache objectForKey:dottedLinesAttributesKey]) {
-        NSMutableArray *itemsAttributes = [NSMutableArray array];
-        for (int i = 1; i < numberOfSections; i++) {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i-1 inSection:0];
-            CGRect viewFrame = CGRectMake(0, i * sectionHeight, self.collectionView.bounds.size.width, dotSize);
-            UICollectionViewLayoutAttributes *attr = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:dottedLineDecorationViewKind withIndexPath:indexPath];
-            attr.frame = viewFrame;
-            attr.zIndex = dottedLineZIndex;
+        NSArray *linesAttributes = [self prepareDottedLinesAttributes];
+        [self.attributesCache setObject:linesAttributes forKey:dottedLinesAttributesKey];
+    }
+}
+
+- (NSArray *)prepareItemsAttributes {
+    NSMutableArray *itemsAttributes = [NSMutableArray array];
+    if ([self.dataSource respondsToSelector:@selector(durationOfEventAtIndexPath:)] &&
+        [self.dataSource respondsToSelector:@selector(startOfEventAtIndexPath:)]) {
+        for (int i = 0; i < [self.collectionView numberOfItemsInSection:0]; i++) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
+            NSInteger minutes = [self.dataSource durationOfEventAtIndexPath:indexPath];
+            CGFloat itemHeight = 1.0 * minutes / minutesInSection * sectionHeight;
+            NSInteger start = [self.dataSource startOfEventAtIndexPath:indexPath];
+            CGFloat itemY = 1.0 * start / minutesInSection * sectionHeight;
+            if (itemY + itemHeight > self.collectionView.contentSize.height) {
+                itemHeight = self.collectionView.contentSize.height - itemY;
+            }
+            CGRect itemFrame = CGRectMake(0, itemY, self.collectionView.bounds.size.width, itemHeight);
+            UICollectionViewLayoutAttributes *attr = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
+            attr.frame = itemFrame;
+            attr.zIndex = itemZIndex;
             [itemsAttributes addObject:attr];
         }
-        [self.attributesCache setObject:itemsAttributes forKey:dottedLinesAttributesKey];
     }
+    return [itemsAttributes copy];
+}
+
+- (NSArray *)prepareDottedLinesAttributes {
+    NSMutableArray *linesAttributes = [NSMutableArray array];
+    for (int i = 1; i < numberOfSections; i++) {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i-1 inSection:0];
+        CGRect viewFrame = CGRectMake(0, i * sectionHeight - dotSize / 2, self.collectionView.bounds.size.width, dotSize);
+        UICollectionViewLayoutAttributes *attr = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:dottedLineDecorationViewKind withIndexPath:indexPath];
+        attr.frame = viewFrame;
+        attr.zIndex = dottedLineZIndex;
+        [linesAttributes addObject:attr];
+    }
+    return [linesAttributes copy];
 }
 
 - (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {

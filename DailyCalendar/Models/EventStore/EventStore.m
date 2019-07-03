@@ -60,6 +60,12 @@ const NSInteger numberOfDaysInWeek = 7;
     }];
 }
 
+- (void)reloadEvents {
+    self.eventStore = [EKEventStore new];
+    [self.eventsByDate removeAllObjects];
+    [self fetchEvents];
+}
+
 - (NSArray *)eventsForDate:(NSDate *)date {
     NSArray *events = [NSArray array];
     NSDate *startDate = [[NSCalendar currentCalendar] startOfDayForDate:date];
