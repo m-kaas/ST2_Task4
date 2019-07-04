@@ -251,7 +251,6 @@
 }
 
 - (void)prepareEventTimesAttributes {
-    //TODO: several events in the same section
     NSMutableArray *timesAttributes = [NSMutableArray array];
     if ([self.dataSource respondsToSelector:@selector(startOfEventAtIndexPath:)]) {
         for (int i = 0; i < [self.collectionView numberOfItemsInSection:0]; i++) {
@@ -267,7 +266,17 @@
                     [self.attributesCache setObject:sectionTimesAttributes forKey:sectionTimeAttributesKey];
                 }
             }
+            BOOL hadEventsInThisSection = NO;
             CGRect viewFrame = CGRectMake(self.collectionView.layoutMargins.left, section * sectionHeight, xOffset, sectionHeight);
+            for (TimeLabelViewLayoutAttributes *previousEvent in timesAttributes) {
+                if (CGRectIntersectsRect(viewFrame, previousEvent.frame)) {
+                    hadEventsInThisSection = YES;
+                    break;
+                }
+            }
+            if (hadEventsInThisSection) {
+                continue;
+            }
             TimeLabelViewLayoutAttributes *attr = [TimeLabelViewLayoutAttributes layoutAttributesForDecorationViewOfKind:eventTimeDecorationViewKind withIndexPath:indexPath];
             attr.frame = viewFrame;
             attr.timeText = [NSString stringWithFormat:@"%ld:%02ld", start / 60, start % 60];
