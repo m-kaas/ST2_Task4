@@ -8,6 +8,7 @@
 
 const CGFloat sectionHeight = 35.0;
 const CGFloat xOffset = 50.0;
+const CGFloat eventsSpacing = 6;
 const NSInteger numberOfHours = 24;
 const NSInteger minutesInSection = 15;
 const NSInteger minutesInHour = 60;

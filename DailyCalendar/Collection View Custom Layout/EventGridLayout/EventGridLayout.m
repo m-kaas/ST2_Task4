@@ -78,10 +78,10 @@
     NSArray *eventTimesAttributes = [self.attributesCache objectForKey:eventTimeAttributesKey];
     [allAttributes addObjectsFromArray:eventTimesAttributes];
     if (self.showCurrentTime) {
-        UICollectionViewLayoutAttributes *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
-        [allAttributes addObject:currentTimeLineAttributes];
-        UICollectionViewLayoutAttributes *currentTimeAttributes = [self.attributesCache objectForKey:currentTimeAttributesKey];
-        [allAttributes addObject:currentTimeAttributes];
+        NSArray *currentTimeAttributes = [self.attributesCache objectForKey:currentTimeAttributesKey];
+        [allAttributes addObjectsFromArray:currentTimeAttributes];
+        NSArray *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
+        [allAttributes addObjectsFromArray:currentTimeLineAttributes];
     }
     for (UICollectionViewLayoutAttributes *attributes in allAttributes) {
         if (CGRectIntersectsRect(attributes.frame, rect)) {
@@ -100,12 +100,13 @@
 
 - (CGRect)sectionToShowCurrentTime {
     CGRect section = CGRectZero;
-    UICollectionViewLayoutAttributes *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
-    if (!currentTimeLineAttributes) {
+    NSArray *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
+    UICollectionViewLayoutAttributes *timeLineAttributes = currentTimeLineAttributes.firstObject;
+    if (!timeLineAttributes) {
         [self prepareCurrentTimeLineAttributes];
-        currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
+        timeLineAttributes = [(NSArray *)[self.attributesCache objectForKey:currentTimeLineAttributesKey] firstObject];
     }
-    CGFloat lineY = currentTimeLineAttributes.frame.origin.y;
+    CGFloat lineY = timeLineAttributes.frame.origin.y;
     CGFloat sectionY = (floor(lineY / sectionHeight) - 1) * sectionHeight + self.collectionView.bounds.size.height;
     sectionY = MIN(sectionY, self.collectionView.contentSize.height - 1);
     section = CGRectMake(0, sectionY, self.collectionView.bounds.size.width, 1);
@@ -121,10 +122,10 @@
 }
 
 - (void)timeChanged {
-    [self.attributesCache removeObjectForKey:currentTimeLineAttributesKey];
-    [self.attributesCache removeObjectForKey:currentTimeAttributesKey];
     [self.attributesCache removeObjectForKey:sectionTimeAttributesKey];
     [self.attributesCache removeObjectForKey:eventTimeAttributesKey];
+    [self.attributesCache removeObjectForKey:currentTimeLineAttributesKey];
+    [self.attributesCache removeObjectForKey:currentTimeAttributesKey];
     [self invalidateLayout];
 }
 
@@ -149,8 +150,9 @@
             if (itemY + itemHeight > self.collectionView.contentSize.height) {
                 itemHeight = self.collectionView.contentSize.height - itemY;
             }
+            CGFloat itemX = xOffset + self.collectionView.layoutMargins.left;
             CGFloat itemWidth = self.collectionView.bounds.size.width - xOffset - self.collectionView.layoutMargins.right - self.collectionView.layoutMargins.left;
-            CGRect itemFrame = CGRectMake(xOffset + self.collectionView.layoutMargins.left, itemY, itemWidth, itemHeight);
+            CGRect itemFrame = CGRectMake(itemX, itemY, itemWidth, itemHeight);
             UICollectionViewLayoutAttributes *attr = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
             attr.frame = itemFrame;
             attr.zIndex = itemZIndex;
@@ -158,6 +160,65 @@
         }
     }
     [self.attributesCache setObject:[itemsAttributes copy] forKey:itemAttributesKey];
+    [self resolveIntersectingItems];
+}
+
+- (void)resolveIntersectingItems {
+    NSArray *itemsAttributes = [self.attributesCache objectForKey:itemAttributesKey];
+    if (!itemsAttributes) {
+        return;
+    }
+    NSMutableArray *resolvedItemsAttributes = [NSMutableArray array];
+    for (UICollectionViewLayoutAttributes *itemAttr in itemsAttributes) {
+        if ([resolvedItemsAttributes containsObject:itemAttr]) {
+            continue;
+        }
+        NSMutableArray *intersectingItems = [NSMutableArray array];
+        __block CGFloat minY = CGRectGetMinY(itemAttr.frame);
+        __block CGFloat maxY = CGRectGetMaxY(itemAttr.frame);
+        for (UICollectionViewLayoutAttributes *attr in itemsAttributes) {
+            if (CGRectIntersectsRect(attr.frame, itemAttr.frame)) {
+                [intersectingItems addObject:attr];
+                minY = MIN(minY, CGRectGetMinY(attr.frame));
+                maxY = MAX(maxY, CGRectGetMaxY(attr.frame));
+            }
+        }
+        if (intersectingItems.count == 0) { // no intersection
+            [resolvedItemsAttributes addObject:itemAttr];
+            continue;
+        } // else we have "cluster" of intersecting items and its range on Y axis
+        NSInteger numberOfColumns = 0;
+        for (CGFloat y = minY; y <= maxY; y++) { // go through all the Y's and count intersecting items at this Y's
+            NSInteger numberOfIntersectingItemsForY = 0;
+            for (UICollectionViewLayoutAttributes *attr in intersectingItems) {
+                if (CGRectGetMinY(attr.frame) <= y && CGRectGetMaxY(attr.frame) >= y) {
+                    numberOfIntersectingItemsForY += 1;
+                }
+            }
+            if (numberOfIntersectingItemsForY > numberOfColumns) {
+                numberOfColumns = numberOfIntersectingItemsForY; // number of columns is the maximum number of intersecting items
+            }
+        }
+        CGFloat itemWidth = (itemAttr.frame.size.width - eventsSpacing * (numberOfColumns - 1)) / numberOfColumns;
+        for (UICollectionViewLayoutAttributes *attr in intersectingItems) {
+            CGRect attrFrame = attr.frame;
+            attrFrame.size.width = itemWidth;
+            attr.frame = attrFrame;
+        }
+        for (int earlierIndex = 0; earlierIndex < intersectingItems.count; earlierIndex++) {
+            UICollectionViewLayoutAttributes *earlierAttr = intersectingItems[earlierIndex];
+            for (int laterIndex = earlierIndex + 1; laterIndex < intersectingItems.count; laterIndex++) {
+                UICollectionViewLayoutAttributes *laterAttr = intersectingItems[laterIndex];
+                if (CGRectIntersectsRect(laterAttr.frame, earlierAttr.frame)) { // move items to the right if needed
+                    CGRect laterAttrFrame = laterAttr.frame;
+                    laterAttrFrame.origin.x += itemWidth + eventsSpacing;
+                    laterAttr.frame = laterAttrFrame;
+                }
+            }
+            [resolvedItemsAttributes addObject:earlierAttr];
+        }
+    }
+    [self.attributesCache setObject:[resolvedItemsAttributes copy] forKey:itemAttributesKey];
 }
 
 - (void)prepareDottedLinesAttributes {
@@ -190,6 +251,7 @@
 }
 
 - (void)prepareEventTimesAttributes {
+    //TODO: several events in the same section
     NSMutableArray *timesAttributes = [NSMutableArray array];
     if ([self.dataSource respondsToSelector:@selector(startOfEventAtIndexPath:)]) {
         for (int i = 0; i < [self.collectionView numberOfItemsInSection:0]; i++) {
@@ -228,7 +290,7 @@
     CGRect viewFrame = CGRectMake(xOffset, lineY, self.collectionView.bounds.size.width - xOffset, 1);
     lineAttributes.frame = viewFrame;
     lineAttributes.zIndex = decorationZIndex;
-    [self.attributesCache setObject:lineAttributes forKey:currentTimeLineAttributesKey];
+    [self.attributesCache setObject:@[lineAttributes] forKey:currentTimeLineAttributesKey];
 }
 
 - (void)prepareCurrentTimeAttributes {
@@ -257,7 +319,7 @@
         NSMutableArray *attributesWithoutCurrentSection = [NSMutableArray arrayWithArray:eventTimesAttributes];
         [eventTimesAttributes enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             TimeLabelViewLayoutAttributes *attr = (TimeLabelViewLayoutAttributes *)obj;
-            if (CGRectGetMinY(attr.frame) < lineY && CGRectGetMaxY(attr.frame) > lineY) {
+            if (CGRectGetMinY(attr.frame) <= lineY && CGRectGetMaxY(attr.frame) > lineY) {
                 [attributesWithoutCurrentSection removeObjectAtIndex:idx];
                 *stop = YES;
             }
@@ -271,7 +333,7 @@
     timeAttributes.textColor = [UIColor customRedColor];
     timeAttributes.font = [UIFont system15RegularFont];
     timeAttributes.zIndex = currentTimeDecorationZIndex;
-    [self.attributesCache setObject:timeAttributes forKey:currentTimeAttributesKey];
+    [self.attributesCache setObject:@[timeAttributes] forKey:currentTimeAttributesKey];
 }
 
 @end

@@ -88,7 +88,7 @@
 }
 
 - (void)addTodayButton {
-    UIBarButtonItem *todayButton = [[UIBarButtonItem alloc] initWithTitle:@"Today" style:UIBarButtonItemStyleDone target:self action:@selector(selectToday)];
+    UIBarButtonItem *todayButton = [[UIBarButtonItem alloc] initWithTitle:@"Сегодня" style:UIBarButtonItemStyleDone target:self action:@selector(selectToday)];
     todayButton.tintColor = [UIColor customWhiteColor];
     self.navigationItem.rightBarButtonItem = todayButton;
 }
@@ -147,7 +147,8 @@
 
 - (nonnull EKEvent *)dayCollectionView:(nonnull DayCollectionView *)dayCollectionView eventForItemAtIndexPath:(nonnull NSIndexPath *)indexPath {
     NSArray *dayEvents = [self.eventStore eventsForDate:self.selectedDate];
-    EKEvent *event = dayEvents[indexPath.item];
+    NSArray *sortedByDate = [dayEvents sortedArrayUsingSelector:@selector(compareStartDateWithEvent:)];
+    EKEvent *event = sortedByDate[indexPath.item];
     return event;
 }
 

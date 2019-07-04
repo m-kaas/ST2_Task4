@@ -17,6 +17,7 @@ NSString * const dayCellId = @"dayCellId";
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
 @property (assign, nonatomic) BOOL shouldUpdateContentOffset;
+@property (assign, nonatomic) BOOL isAnimating;
 @property (assign, nonatomic) CGFloat lastContentOffset;
 
 @end
@@ -30,6 +31,7 @@ NSString * const dayCellId = @"dayCellId";
     [self addSubview:view];
     view.frame = self.bounds;
     self.collectionView.backgroundColor = [UIColor customDarkBlueColor];
+    self.isAnimating = NO;
     self.shouldUpdateContentOffset = YES;
     UINib *dayCellNib = [UINib nibWithNibName:NSStringFromClass([WeekCollectionViewCell class]) bundle:[NSBundle mainBundle]];
     [self.collectionView registerNib:dayCellNib forCellWithReuseIdentifier:dayCellId];
@@ -59,6 +61,7 @@ NSString * const dayCellId = @"dayCellId";
     NSIndexPath *selectedIndexPath = self.collectionView.indexPathsForSelectedItems.firstObject;
     if (selectedIndexPath) {
         NSIndexPath *scrolledIndexPath = [NSIndexPath indexPathForItem:0 inSection:selectedIndexPath.section];
+        self.isAnimating = YES;
         [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
     }
 }
@@ -147,7 +150,15 @@ NSString * const dayCellId = @"dayCellId";
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    if (self.shouldUpdateContentOffset) {
+    if (self.shouldUpdateContentOffset && self.isAnimating) {
+        self.lastContentOffset = scrollView.contentOffset.x;
+        self.shouldUpdateContentOffset = NO;
+        self.isAnimating = NO;
+    }
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    if (self.shouldUpdateContentOffset && !self.isAnimating) {
         self.lastContentOffset = scrollView.contentOffset.x;
         self.shouldUpdateContentOffset = NO;
     }
