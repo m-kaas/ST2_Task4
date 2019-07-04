@@ -7,13 +7,14 @@
 //
 
 const CGFloat sectionHeight = 35.0;
-const CGFloat xOffset = 55.0;
+const CGFloat xOffset = 50.0;
 const NSInteger numberOfHours = 24;
 const NSInteger minutesInSection = 15;
 const NSInteger minutesInHour = 60;
 const NSInteger numberOfSectionsInHour = minutesInHour / minutesInSection;
 const NSInteger numberOfSections = numberOfHours * numberOfSectionsInHour;
-const NSInteger itemZIndex = 1;
+const NSInteger itemZIndex = 2;
+const NSInteger currentTimeDecorationZIndex = 1;
 const NSInteger decorationZIndex = 0;
 NSString * const itemAttributesKey = @"itemAttributesKey";
 NSString * const dottedLineAttributesKey = @"dottedLineAttributesKey";

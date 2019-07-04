@@ -32,7 +32,7 @@
         [self registerClass:[DottedLineView class] forDecorationViewOfKind:dottedLineDecorationViewKind];
         [self registerClass:[TimeLabelView class] forDecorationViewOfKind:sectionTimeDecorationViewKind];
         [self registerClass:[TimeLabelView class] forDecorationViewOfKind:eventTimeDecorationViewKind];
-        //[self registerClass:[TimeLabelView class] forDecorationViewOfKind:currentTimeDecorationViewKind];
+        [self registerClass:[TimeLabelView class] forDecorationViewOfKind:currentTimeDecorationViewKind];
         [self registerClass:[CurrentTimeLineView class] forDecorationViewOfKind:currentTimeLineDecorationViewKind];
         
         NSDate *nextMinuteDate =  [[NSCalendar currentCalendar] nextDateAfterDate:[NSDate date] matchingUnit:NSCalendarUnitSecond value:0 options:NSCalendarMatchNextTime];
@@ -72,6 +72,10 @@
         NSArray *currentTimeLineAttributes = [self prepareCurrentTimeLineAttributes];
         [self.attributesCache setObject:currentTimeLineAttributes forKey:currentTimeLineAttributesKey];
     }
+    if (![self.attributesCache objectForKey:currentTimeAttributesKey]) {
+        NSArray *currentTimeAttributes = [self prepareCurrentTimeAttributes];
+        [self.attributesCache setObject:currentTimeAttributes forKey:currentTimeAttributesKey];
+    }
 }
 
 - (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {
@@ -87,6 +91,8 @@
     [allAttributes addObjectsFromArray:eventTimesAttributes];
     NSArray *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
     [allAttributes addObjectsFromArray:currentTimeLineAttributes];
+    NSArray *currentTimeAttributes = [self.attributesCache objectForKey:currentTimeAttributesKey];
+    [allAttributes addObjectsFromArray:currentTimeAttributes];
     for (UICollectionViewLayoutAttributes *attributes in allAttributes) {
         if (CGRectIntersectsRect(attributes.frame, rect)) {
             [rectAttributes addObject:attributes];
@@ -121,8 +127,8 @@
             if (itemY + itemHeight > self.collectionView.contentSize.height) {
                 itemHeight = self.collectionView.contentSize.height - itemY;
             }
-            CGFloat itemWidth = self.collectionView.bounds.size.width - xOffset - self.collectionView.layoutMargins.right;
-            CGRect itemFrame = CGRectMake(xOffset, itemY, itemWidth, itemHeight);
+            CGFloat itemWidth = self.collectionView.bounds.size.width - xOffset - self.collectionView.layoutMargins.right - self.collectionView.layoutMargins.left;
+            CGRect itemFrame = CGRectMake(xOffset + self.collectionView.layoutMargins.left, itemY, itemWidth, itemHeight);
             UICollectionViewLayoutAttributes *attr = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:indexPath];
             attr.frame = itemFrame;
             attr.zIndex = itemZIndex;
@@ -195,6 +201,23 @@
     lineAttributes.frame = viewFrame;
     lineAttributes.zIndex = decorationZIndex;
     return @[lineAttributes];
+}
+
+- (NSArray *)prepareCurrentTimeAttributes {
+    //TODO: do not show other times if they are equal to current time
+    NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
+    TimeLabelViewLayoutAttributes *timeAttributes = [TimeLabelViewLayoutAttributes layoutAttributesForDecorationViewOfKind:currentTimeDecorationViewKind withIndexPath:indexPath];
+    NSDate *today = [NSDate date];
+    NSDate *startOfDay = [[NSCalendar currentCalendar] startOfDayForDate:today];
+    NSInteger start = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:startOfDay toDate:today options:0].minute;
+    CGFloat timeY = 1.0 * start / minutesInSection * sectionHeight - sectionHeight / 2.0;
+    CGRect viewFrame = CGRectMake(self.collectionView.layoutMargins.left, timeY, xOffset, sectionHeight);
+    timeAttributes.frame = viewFrame;
+    timeAttributes.timeText = [NSString stringWithFormat:@"%ld:%ld", start / 60, start % 60];
+    timeAttributes.textColor = [UIColor customRedColor];
+    timeAttributes.font = [UIFont system15RegularFont];
+    timeAttributes.zIndex = currentTimeDecorationZIndex;
+    return @[timeAttributes];
 }
 
 @end
