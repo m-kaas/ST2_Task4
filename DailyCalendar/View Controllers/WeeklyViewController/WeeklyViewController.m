@@ -95,6 +95,7 @@
 - (void)selectToday {
     self.selectedDate = [NSDate date];
     [self.weekView selectToday];
+    self.dayView.showCurrentTime = YES;
     [self.dayView reloadData];
 }
 
@@ -112,10 +113,10 @@
 #pragma mark - WeekCollectionViewDelegate
 
 - (void)weekCollectionView:(WeekCollectionView *)weekCollectionView didSelectDateAtIndexPath:(NSIndexPath *)indexPath {
-    //TODO: show current time only on today's screen
     NSInteger days = numberOfDaysInWeek * indexPath.section + indexPath.item;
     NSDate *date = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:days toDate:self.eventStore.startDate options:0];
     self.selectedDate = date;
+    self.dayView.showCurrentTime = [[NSCalendar currentCalendar] isDate:date inSameDayAsDate:[NSDate date]];
     [self.dayView reloadData];
 }
 

@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DayCollectionView : UIView
 
 @property (weak, nonatomic) id<DayCollectionViewDataSource> dataSource;
+@property (assign, nonatomic) BOOL showCurrentTime;
 
 - (void)reloadData;
 

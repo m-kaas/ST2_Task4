@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EventGridLayout : UICollectionViewLayout
 
 @property (weak, nonatomic) id<EventGridLayoutDataSource> dataSource;
+@property (assign, nonatomic) BOOL showCurrentTime;
 
 - (void)invalidateFullLayout;
 

@@ -60,6 +60,13 @@ NSString * const eventCellId = @"eventCellId";
     [self.eventGridLayout invalidateFullLayout];
 }
 
+#pragma mark - Custom Accessors
+
+- (void)setShowCurrentTime:(BOOL)showCurrentTime {
+    _showCurrentTime = showCurrentTime;
+    self.eventGridLayout.showCurrentTime = showCurrentTime;
+}
+
 #pragma mark - UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {

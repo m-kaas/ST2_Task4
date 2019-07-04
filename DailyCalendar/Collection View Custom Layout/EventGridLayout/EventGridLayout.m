@@ -29,15 +29,9 @@
 {
     self = [super initWithCoder:coder];
     if (self) {
-        [self registerClass:[DottedLineView class] forDecorationViewOfKind:dottedLineDecorationViewKind];
-        [self registerClass:[TimeLabelView class] forDecorationViewOfKind:sectionTimeDecorationViewKind];
-        [self registerClass:[TimeLabelView class] forDecorationViewOfKind:eventTimeDecorationViewKind];
-        [self registerClass:[TimeLabelView class] forDecorationViewOfKind:currentTimeDecorationViewKind];
-        [self registerClass:[CurrentTimeLineView class] forDecorationViewOfKind:currentTimeLineDecorationViewKind];
-        
-        NSDate *nextMinuteDate =  [[NSCalendar currentCalendar] nextDateAfterDate:[NSDate date] matchingUnit:NSCalendarUnitSecond value:0 options:NSCalendarMatchNextTime];
-        NSTimer *minuteTimer = [[NSTimer alloc] initWithFireDate:nextMinuteDate interval:60 target:self selector:@selector(timeChanged) userInfo:nil repeats:YES];
-        [[NSRunLoop currentRunLoop] addTimer:minuteTimer forMode:NSDefaultRunLoopMode];
+        self.showCurrentTime = YES;
+        [self registerDecorationViewClasses];
+        [self startTimeChangedTimer];
     }
     return self;
 }
@@ -89,10 +83,12 @@
     [allAttributes addObjectsFromArray:sectionTimesAttributes];
     NSArray *eventTimesAttributes = [self.attributesCache objectForKey:eventTimeAttributesKey];
     [allAttributes addObjectsFromArray:eventTimesAttributes];
-    NSArray *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
-    [allAttributes addObjectsFromArray:currentTimeLineAttributes];
-    NSArray *currentTimeAttributes = [self.attributesCache objectForKey:currentTimeAttributesKey];
-    [allAttributes addObjectsFromArray:currentTimeAttributes];
+    if (self.showCurrentTime) {
+        NSArray *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
+        [allAttributes addObjectsFromArray:currentTimeLineAttributes];
+        NSArray *currentTimeAttributes = [self.attributesCache objectForKey:currentTimeAttributesKey];
+        [allAttributes addObjectsFromArray:currentTimeAttributes];
+    }
     for (UICollectionViewLayoutAttributes *attributes in allAttributes) {
         if (CGRectIntersectsRect(attributes.frame, rect)) {
             [rectAttributes addObject:attributes];
@@ -110,10 +106,24 @@
 
 #pragma mark - Private
 
+- (void)startTimeChangedTimer {
+    NSDate *nextMinuteDate =  [[NSCalendar currentCalendar] nextDateAfterDate:[NSDate date] matchingUnit:NSCalendarUnitSecond value:0 options:NSCalendarMatchNextTime];
+    NSTimer *minuteTimer = [[NSTimer alloc] initWithFireDate:nextMinuteDate interval:60 target:self selector:@selector(timeChanged) userInfo:nil repeats:YES];
+    [[NSRunLoop currentRunLoop] addTimer:minuteTimer forMode:NSDefaultRunLoopMode];
+}
+
 - (void)timeChanged {
     [self.attributesCache removeObjectForKey:currentTimeLineAttributesKey];
     [self.attributesCache removeObjectForKey:currentTimeAttributesKey];
     [self invalidateLayout];
+}
+
+- (void)registerDecorationViewClasses {
+    [self registerClass:[DottedLineView class] forDecorationViewOfKind:dottedLineDecorationViewKind];
+    [self registerClass:[TimeLabelView class] forDecorationViewOfKind:sectionTimeDecorationViewKind];
+    [self registerClass:[TimeLabelView class] forDecorationViewOfKind:eventTimeDecorationViewKind];
+    [self registerClass:[TimeLabelView class] forDecorationViewOfKind:currentTimeDecorationViewKind];
+    [self registerClass:[CurrentTimeLineView class] forDecorationViewOfKind:currentTimeLineDecorationViewKind];
 }
 
 - (NSArray *)prepareItemsAttributes {

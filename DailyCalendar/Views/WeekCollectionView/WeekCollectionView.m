@@ -16,7 +16,7 @@ NSString * const dayCellId = @"dayCellId";
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionView;
 @property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *flowLayout;
-
+@property (assign, nonatomic) BOOL shouldUpdateContentOffset;
 @property (assign, nonatomic) CGFloat lastContentOffset;
 
 @end
@@ -30,7 +30,7 @@ NSString * const dayCellId = @"dayCellId";
     [self addSubview:view];
     view.frame = self.bounds;
     self.collectionView.backgroundColor = [UIColor customDarkBlueColor];
-    self.lastContentOffset = 0;
+    self.shouldUpdateContentOffset = YES;
     UINib *dayCellNib = [UINib nibWithNibName:NSStringFromClass([WeekCollectionViewCell class]) bundle:[NSBundle mainBundle]];
     [self.collectionView registerNib:dayCellNib forCellWithReuseIdentifier:dayCellId];
 }
@@ -55,6 +55,7 @@ NSString * const dayCellId = @"dayCellId";
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [self.flowLayout invalidateLayout];
+    self.shouldUpdateContentOffset = YES;
     NSIndexPath *selectedIndexPath = self.collectionView.indexPathsForSelectedItems.firstObject;
     if (selectedIndexPath) {
         NSIndexPath *scrolledIndexPath = [NSIndexPath indexPathForItem:0 inSection:selectedIndexPath.section];
@@ -78,9 +79,8 @@ NSString * const dayCellId = @"dayCellId";
         NSInteger section = days / numberOfDaysInWeek;
         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForItem:item inSection:section];
         NSIndexPath *scrolledIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
-        [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+        [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
         [self.collectionView selectItemAtIndexPath:selectedIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
-        self.lastContentOffset = self.collectionView.contentOffset.x;
     }
 }
 
@@ -141,6 +141,13 @@ NSString * const dayCellId = @"dayCellId";
         NSIndexPath *newSelectedIndexPath = [NSIndexPath indexPathForItem:selectedIndexPath.item inSection:(selectedIndexPath.section + direction)];
         [self.collectionView selectItemAtIndexPath:newSelectedIndexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
         [self collectionView:self.collectionView didSelectItemAtIndexPath:newSelectedIndexPath];
+    }
+}
+
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
+    if (self.shouldUpdateContentOffset) {
+        self.lastContentOffset = scrollView.contentOffset.x;
+        self.shouldUpdateContentOffset = NO;
     }
 }
 
