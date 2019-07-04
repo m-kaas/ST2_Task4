@@ -44,6 +44,7 @@
             [self setupCalendarInfo];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.dayView reloadData];
+                [self.dayView scrollToCurrentTime];
                 [self.weekView reloadData];
                 [self.weekView selectToday];
             });

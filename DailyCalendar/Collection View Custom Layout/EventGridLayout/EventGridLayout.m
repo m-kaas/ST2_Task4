@@ -47,28 +47,22 @@
         self.attributesCache = [NSCache new];
     }
     if (![self.attributesCache objectForKey:itemAttributesKey]) {
-        NSArray *itemsAttributes = [self prepareItemsAttributes];
-        [self.attributesCache setObject:itemsAttributes forKey:itemAttributesKey];
+        [self prepareItemsAttributes];
     }
     if (![self.attributesCache objectForKey:dottedLineAttributesKey]) {
-        NSArray *linesAttributes = [self prepareDottedLinesAttributes];
-        [self.attributesCache setObject:linesAttributes forKey:dottedLineAttributesKey];
+        [self prepareDottedLinesAttributes];
     }
     if (![self.attributesCache objectForKey:sectionTimeAttributesKey]) {
-        NSArray *sectionTimesAttributes = [self prepareSectionTimesAttributes];
-        [self.attributesCache setObject:sectionTimesAttributes forKey:sectionTimeAttributesKey];
+        [self prepareSectionTimesAttributes];
     }
     if (![self.attributesCache objectForKey:eventTimeAttributesKey]) {
-        NSArray *eventTimesAttributes = [self prepareEventTimesAttributes];
-        [self.attributesCache setObject:eventTimesAttributes forKey:eventTimeAttributesKey];
+        [self prepareEventTimesAttributes];
     }
     if (![self.attributesCache objectForKey:currentTimeLineAttributesKey]) {
-        NSArray *currentTimeLineAttributes = [self prepareCurrentTimeLineAttributes];
-        [self.attributesCache setObject:currentTimeLineAttributes forKey:currentTimeLineAttributesKey];
+        [self prepareCurrentTimeLineAttributes];
     }
     if (![self.attributesCache objectForKey:currentTimeAttributesKey]) {
-        NSArray *currentTimeAttributes = [self prepareCurrentTimeAttributes];
-        [self.attributesCache setObject:currentTimeAttributes forKey:currentTimeAttributesKey];
+        [self prepareCurrentTimeAttributes];
     }
 }
 
@@ -84,10 +78,10 @@
     NSArray *eventTimesAttributes = [self.attributesCache objectForKey:eventTimeAttributesKey];
     [allAttributes addObjectsFromArray:eventTimesAttributes];
     if (self.showCurrentTime) {
-        NSArray *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
-        [allAttributes addObjectsFromArray:currentTimeLineAttributes];
-        NSArray *currentTimeAttributes = [self.attributesCache objectForKey:currentTimeAttributesKey];
-        [allAttributes addObjectsFromArray:currentTimeAttributes];
+        UICollectionViewLayoutAttributes *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
+        [allAttributes addObject:currentTimeLineAttributes];
+        UICollectionViewLayoutAttributes *currentTimeAttributes = [self.attributesCache objectForKey:currentTimeAttributesKey];
+        [allAttributes addObject:currentTimeAttributes];
     }
     for (UICollectionViewLayoutAttributes *attributes in allAttributes) {
         if (CGRectIntersectsRect(attributes.frame, rect)) {
@@ -104,6 +98,20 @@
     [self invalidateLayout];
 }
 
+- (CGRect)sectionToShowCurrentTime {
+    CGRect section = CGRectZero;
+    UICollectionViewLayoutAttributes *currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
+    if (!currentTimeLineAttributes) {
+        [self prepareCurrentTimeLineAttributes];
+        currentTimeLineAttributes = [self.attributesCache objectForKey:currentTimeLineAttributesKey];
+    }
+    CGFloat lineY = currentTimeLineAttributes.frame.origin.y;
+    CGFloat sectionY = (floor(lineY / sectionHeight) - 1) * sectionHeight + self.collectionView.bounds.size.height;
+    sectionY = MIN(sectionY, self.collectionView.contentSize.height - 1);
+    section = CGRectMake(0, sectionY, self.collectionView.bounds.size.width, 1);
+    return section;
+}
+
 #pragma mark - Private
 
 - (void)startTimeChangedTimer {
@@ -115,6 +123,8 @@
 - (void)timeChanged {
     [self.attributesCache removeObjectForKey:currentTimeLineAttributesKey];
     [self.attributesCache removeObjectForKey:currentTimeAttributesKey];
+    [self.attributesCache removeObjectForKey:sectionTimeAttributesKey];
+    [self.attributesCache removeObjectForKey:eventTimeAttributesKey];
     [self invalidateLayout];
 }
 
@@ -126,7 +136,7 @@
     [self registerClass:[CurrentTimeLineView class] forDecorationViewOfKind:currentTimeLineDecorationViewKind];
 }
 
-- (NSArray *)prepareItemsAttributes {
+- (void)prepareItemsAttributes {
     NSMutableArray *itemsAttributes = [NSMutableArray array];
     if ([self.dataSource respondsToSelector:@selector(durationOfEventAtIndexPath:)] &&
         [self.dataSource respondsToSelector:@selector(startOfEventAtIndexPath:)]) {
@@ -147,10 +157,10 @@
             [itemsAttributes addObject:attr];
         }
     }
-    return [itemsAttributes copy];
+    [self.attributesCache setObject:[itemsAttributes copy] forKey:itemAttributesKey];
 }
 
-- (NSArray *)prepareDottedLinesAttributes {
+- (void)prepareDottedLinesAttributes {
     NSMutableArray *linesAttributes = [NSMutableArray array];
     for (int i = 1; i < numberOfSections; i++) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i-1 inSection:0];
@@ -160,10 +170,10 @@
         attr.zIndex = decorationZIndex;
         [linesAttributes addObject:attr];
     }
-    return [linesAttributes copy];
+    [self.attributesCache setObject:[linesAttributes copy] forKey:dottedLineAttributesKey];
 }
 
-- (NSArray *)prepareSectionTimesAttributes {
+- (void)prepareSectionTimesAttributes {
     NSMutableArray *timesAttributes = [NSMutableArray array];
     for (int i = 0; i < numberOfHours; i++) {
         NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
@@ -176,33 +186,39 @@
         attr.zIndex = decorationZIndex;
         [timesAttributes addObject:attr];
     }
-    return [timesAttributes copy];
+    [self.attributesCache setObject:[timesAttributes copy] forKey:sectionTimeAttributesKey];
 }
 
-- (NSArray *)prepareEventTimesAttributes {
+- (void)prepareEventTimesAttributes {
     NSMutableArray *timesAttributes = [NSMutableArray array];
     if ([self.dataSource respondsToSelector:@selector(startOfEventAtIndexPath:)]) {
         for (int i = 0; i < [self.collectionView numberOfItemsInSection:0]; i++) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
             NSInteger start = [self.dataSource startOfEventAtIndexPath:indexPath];
-            if (start % minutesInHour == 0) {
-                continue;
-            }
             NSInteger section = start / minutesInSection;
+            if (section % numberOfSectionsInHour == 0) {
+                NSArray *sectionTimesAttributes = [self.attributesCache objectForKey:sectionTimeAttributesKey];
+                if (sectionTimesAttributes) {
+                    NSMutableArray *attributesWithoutEventSection = [NSMutableArray arrayWithArray:sectionTimesAttributes];
+                    [attributesWithoutEventSection removeObjectAtIndex:(section / numberOfSectionsInHour)];
+                    sectionTimesAttributes = [attributesWithoutEventSection copy];
+                    [self.attributesCache setObject:sectionTimesAttributes forKey:sectionTimeAttributesKey];
+                }
+            }
             CGRect viewFrame = CGRectMake(self.collectionView.layoutMargins.left, section * sectionHeight, xOffset, sectionHeight);
             TimeLabelViewLayoutAttributes *attr = [TimeLabelViewLayoutAttributes layoutAttributesForDecorationViewOfKind:eventTimeDecorationViewKind withIndexPath:indexPath];
             attr.frame = viewFrame;
-            attr.timeText = [NSString stringWithFormat:@"%ld:%ld", start / 60, start % 60];
+            attr.timeText = [NSString stringWithFormat:@"%ld:%02ld", start / 60, start % 60];
             attr.textColor = [UIColor customBlackColor];
             attr.font = [UIFont system15RegularFont];
             attr.zIndex = decorationZIndex;
             [timesAttributes addObject:attr];
         }
     }
-    return [timesAttributes copy];
+    [self.attributesCache setObject:[timesAttributes copy] forKey:eventTimeAttributesKey];
 }
 
-- (NSArray *)prepareCurrentTimeLineAttributes {
+- (void)prepareCurrentTimeLineAttributes {
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     UICollectionViewLayoutAttributes *lineAttributes = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:currentTimeLineDecorationViewKind withIndexPath:indexPath];
     NSDate *today = [NSDate date];
@@ -212,24 +228,50 @@
     CGRect viewFrame = CGRectMake(xOffset, lineY, self.collectionView.bounds.size.width - xOffset, 1);
     lineAttributes.frame = viewFrame;
     lineAttributes.zIndex = decorationZIndex;
-    return @[lineAttributes];
+    [self.attributesCache setObject:lineAttributes forKey:currentTimeLineAttributesKey];
 }
 
-- (NSArray *)prepareCurrentTimeAttributes {
-    //TODO: do not show other times if they are equal to current time
+- (void)prepareCurrentTimeAttributes {
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     TimeLabelViewLayoutAttributes *timeAttributes = [TimeLabelViewLayoutAttributes layoutAttributesForDecorationViewOfKind:currentTimeDecorationViewKind withIndexPath:indexPath];
     NSDate *today = [NSDate date];
     NSDate *startOfDay = [[NSCalendar currentCalendar] startOfDayForDate:today];
     NSInteger start = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:startOfDay toDate:today options:0].minute;
-    CGFloat timeY = 1.0 * start / minutesInSection * sectionHeight - sectionHeight / 2.0;
+    CGFloat lineY = 1.0 * start / minutesInSection * sectionHeight;
+    CGFloat timeY = lineY - sectionHeight / 2.0;
+    NSArray *sectionTimesAttributes = [self.attributesCache objectForKey:sectionTimeAttributesKey];
+    if (sectionTimesAttributes) {
+        NSMutableArray *attributesWithoutCurrentSection = [NSMutableArray arrayWithArray:sectionTimesAttributes];
+        [sectionTimesAttributes enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TimeLabelViewLayoutAttributes *attr = (TimeLabelViewLayoutAttributes *)obj;
+            if (CGRectGetMinY(attr.frame) <= lineY && CGRectGetMaxY(attr.frame) > lineY) {
+                [attributesWithoutCurrentSection removeObjectAtIndex:idx];
+                *stop = YES;
+            }
+        }];
+        sectionTimesAttributes = [attributesWithoutCurrentSection copy];
+        [self.attributesCache setObject:sectionTimesAttributes forKey:sectionTimeAttributesKey];
+    }
+    NSArray *eventTimesAttributes = [self.attributesCache objectForKey:eventTimeAttributesKey];
+    if (eventTimesAttributes) {
+        NSMutableArray *attributesWithoutCurrentSection = [NSMutableArray arrayWithArray:eventTimesAttributes];
+        [eventTimesAttributes enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            TimeLabelViewLayoutAttributes *attr = (TimeLabelViewLayoutAttributes *)obj;
+            if (CGRectGetMinY(attr.frame) < lineY && CGRectGetMaxY(attr.frame) > lineY) {
+                [attributesWithoutCurrentSection removeObjectAtIndex:idx];
+                *stop = YES;
+            }
+        }];
+        eventTimesAttributes = [attributesWithoutCurrentSection copy];
+        [self.attributesCache setObject:eventTimesAttributes forKey:eventTimeAttributesKey];
+    }
     CGRect viewFrame = CGRectMake(self.collectionView.layoutMargins.left, timeY, xOffset, sectionHeight);
     timeAttributes.frame = viewFrame;
-    timeAttributes.timeText = [NSString stringWithFormat:@"%ld:%ld", start / 60, start % 60];
+    timeAttributes.timeText = [NSString stringWithFormat:@"%ld:%02ld", start / 60, start % 60];
     timeAttributes.textColor = [UIColor customRedColor];
     timeAttributes.font = [UIFont system15RegularFont];
     timeAttributes.zIndex = currentTimeDecorationZIndex;
-    return @[timeAttributes];
+    [self.attributesCache setObject:timeAttributes forKey:currentTimeAttributesKey];
 }
 
 @end

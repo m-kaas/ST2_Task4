@@ -66,10 +66,12 @@ NSString * const dayCellId = @"dayCellId";
 #pragma mark - Public
 
 - (void)reloadData {
+    NSIndexPath *indexPath = self.collectionView.indexPathsForSelectedItems.firstObject;
     [self.collectionView reloadData];
+    if (indexPath) {
+        [self.collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+    }
 }
-
-#pragma mark - Private
 
 - (void)selectToday {
     if ([self.dataSource respondsToSelector:@selector(startDateForWeekCollectionView:)]) {
@@ -79,7 +81,7 @@ NSString * const dayCellId = @"dayCellId";
         NSInteger section = days / numberOfDaysInWeek;
         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForItem:item inSection:section];
         NSIndexPath *scrolledIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
-        [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+        [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         [self.collectionView selectItemAtIndexPath:selectedIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
     }
 }

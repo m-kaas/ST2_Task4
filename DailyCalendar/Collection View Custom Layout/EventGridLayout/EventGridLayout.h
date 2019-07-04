@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) BOOL showCurrentTime;
 
 - (void)invalidateFullLayout;
+- (CGRect)sectionToShowCurrentTime;
 
 @end
 

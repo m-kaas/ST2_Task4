@@ -60,6 +60,11 @@ NSString * const eventCellId = @"eventCellId";
     [self.eventGridLayout invalidateFullLayout];
 }
 
+- (void)scrollToCurrentTime {
+    CGRect sectionToShowCurrentTime = [self.eventGridLayout sectionToShowCurrentTime];
+    [self.collectionView scrollRectToVisible:sectionToShowCurrentTime animated:NO];
+}
+
 #pragma mark - Custom Accessors
 
 - (void)setShowCurrentTime:(BOOL)showCurrentTime {
