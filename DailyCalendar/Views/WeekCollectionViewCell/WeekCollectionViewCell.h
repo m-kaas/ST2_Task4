@@ -12,8 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface WeekCollectionViewCell : UICollectionViewCell
 
-@property (strong, nonatomic) NSDate *date;
-@property (assign, nonatomic) BOOL hasEvents;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dayLabel;
+@property (weak, nonatomic) IBOutlet UILabel *dotLabel;
 
 @end
 

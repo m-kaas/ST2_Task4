@@ -112,6 +112,7 @@
 #pragma mark - WeekCollectionViewDelegate
 
 - (void)weekCollectionView:(WeekCollectionView *)weekCollectionView didSelectDateAtIndexPath:(NSIndexPath *)indexPath {
+    //TODO: show current time only on today's screen
     NSInteger days = numberOfDaysInWeek * indexPath.section + indexPath.item;
     NSDate *date = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:days toDate:self.eventStore.startDate options:0];
     self.selectedDate = date;

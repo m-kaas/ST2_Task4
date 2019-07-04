@@ -101,16 +101,18 @@
     return [rectAttributes copy];
 }
 
-- (void)invalidateLayout {
-    [super invalidateLayout];
+#pragma mark - Public
+
+- (void)invalidateFullLayout {
     [self.attributesCache removeAllObjects];
+    [self invalidateLayout];
 }
 
 #pragma mark - Private
 
 - (void)timeChanged {
-    //TODO: invalidate layout only for currentTimeLineView
-    //[self.attributesCache removeObjectForKey:currentTimeLineAttributesKey];
+    [self.attributesCache removeObjectForKey:currentTimeLineAttributesKey];
+    [self.attributesCache removeObjectForKey:currentTimeAttributesKey];
     [self invalidateLayout];
 }
 

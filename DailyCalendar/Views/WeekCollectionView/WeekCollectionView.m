@@ -55,7 +55,11 @@ NSString * const dayCellId = @"dayCellId";
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [self.flowLayout invalidateLayout];
-    //TODO: scroll to the start of the week without decelerating
+    NSIndexPath *selectedIndexPath = self.collectionView.indexPathsForSelectedItems.firstObject;
+    if (selectedIndexPath) {
+        NSIndexPath *scrolledIndexPath = [NSIndexPath indexPathForItem:0 inSection:selectedIndexPath.section];
+        [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+    }
 }
 
 #pragma mark - Public
@@ -76,6 +80,7 @@ NSString * const dayCellId = @"dayCellId";
         NSIndexPath *scrolledIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
         [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         [self.collectionView selectItemAtIndexPath:selectedIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        self.lastContentOffset = self.collectionView.contentOffset.x;
     }
 }
 
@@ -100,9 +105,15 @@ NSString * const dayCellId = @"dayCellId";
         NSInteger days = indexPath.section * numberOfDaysInWeek + indexPath.item;
         NSDate *startDate = [self.dataSource startDateForWeekCollectionView:self];
         NSDate *eventDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:days toDate:startDate options:0];
-        cell.date = eventDate;
+        NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:eventDate];
+        cell.dateLabel.text = [NSString stringWithFormat:@"%ld", dateComponents.day];
+        cell.dayLabel.text = [NSCalendar currentCalendar].shortWeekdaySymbols[dateComponents.weekday - 1].uppercaseString;
         BOOL hasEvents = [self.dataSource weekCollectionView:self hasEventsForDate:eventDate];
-        cell.hasEvents = hasEvents;
+        if (hasEvents) {
+            cell.dotLabel.textColor = [UIColor customWhiteColor];
+        } else {
+            cell.dotLabel.textColor = [UIColor clearColor];
+        }
     }
     cell.layer.cornerRadius = cell.bounds.size.width / 2;
     return cell;

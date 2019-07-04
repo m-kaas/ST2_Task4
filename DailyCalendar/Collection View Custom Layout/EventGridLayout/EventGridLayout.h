@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic) id<EventGridLayoutDataSource> dataSource;
 
+- (void)invalidateFullLayout;
+
 @end
 
 NS_ASSUME_NONNULL_END

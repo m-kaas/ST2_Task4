@@ -10,18 +10,7 @@
 #import "UIColor+CustomColors.h"
 #import "UIFont+CustomFonts.h"
 
-@interface WeekCollectionViewCell ()
-
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dayLabel;
-@property (weak, nonatomic) IBOutlet UILabel *dotLabel;
-
-
-@end
-
 @implementation WeekCollectionViewCell
-
-#pragma mark - Lifecycle
 
 - (void)awakeFromNib {
     [super awakeFromNib];
@@ -34,11 +23,8 @@
 
 - (void)prepareForReuse {
     [super prepareForReuse];
-    self.hasEvents = false;
     self.selected = NO;
 }
-
-#pragma mark - Custom Accessors
 
 - (void)setSelected:(BOOL)selected {
     [super setSelected:selected];
@@ -47,25 +33,6 @@
     } else {
         self.backgroundColor = [UIColor clearColor];
     }
-}
-
-- (void)setHasEvents:(BOOL)hasEvents {
-    //TODO: move hasEvents to VC
-    _hasEvents = hasEvents;
-    if (hasEvents) {
-        self.dotLabel.textColor = [UIColor customWhiteColor];
-    } else {
-        self.dotLabel.textColor = [UIColor clearColor];
-    }
-}
-
-- (void)setDate:(NSDate *)date {
-    if (_date != date) {
-        _date = date;
-    }
-    NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:date];
-    self.dateLabel.text = [NSString stringWithFormat:@"%ld", dateComponents.day];
-    self.dayLabel.text = [NSCalendar currentCalendar].shortWeekdaySymbols[dateComponents.weekday - 1].uppercaseString;
 }
 
 @end

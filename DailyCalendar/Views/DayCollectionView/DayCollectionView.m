@@ -50,14 +50,14 @@ NSString * const eventCellId = @"eventCellId";
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    [self.eventGridLayout invalidateLayout];
-    //TODO: scroll to the start of the week without decelerating
+    [self.eventGridLayout invalidateFullLayout];
 }
 
 #pragma mark - Public
 
 - (void)reloadData {
     [self.collectionView reloadData];
+    [self.eventGridLayout invalidateFullLayout];
 }
 
 #pragma mark - UICollectionViewDataSource
