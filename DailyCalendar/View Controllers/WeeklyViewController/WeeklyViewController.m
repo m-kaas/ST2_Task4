@@ -88,16 +88,9 @@
 }
 
 - (void)addTodayButton {
-    UIBarButtonItem *todayButton = [[UIBarButtonItem alloc] initWithTitle:@"Сегодня" style:UIBarButtonItemStyleDone target:self action:@selector(selectToday)];
+    UIBarButtonItem *todayButton = [[UIBarButtonItem alloc] initWithTitle:@"Сегодня" style:UIBarButtonItemStyleDone target:self.weekView action:@selector(selectToday)];
     todayButton.tintColor = [UIColor customWhiteColor];
     self.navigationItem.rightBarButtonItem = todayButton;
-}
-
-- (void)selectToday {
-    self.selectedDate = [NSDate date];
-    [self.weekView selectToday];
-    self.dayView.showCurrentTime = YES;
-    [self.dayView reloadData];
 }
 
 #pragma mark - Custom Accessors

@@ -31,8 +31,6 @@ NSString * const dayCellId = @"dayCellId";
     [self addSubview:view];
     view.frame = self.bounds;
     self.collectionView.backgroundColor = [UIColor customDarkBlueColor];
-    self.isAnimating = NO;
-    self.shouldUpdateContentOffset = YES;
     UINib *dayCellNib = [UINib nibWithNibName:NSStringFromClass([WeekCollectionViewCell class]) bundle:[NSBundle mainBundle]];
     [self.collectionView registerNib:dayCellNib forCellWithReuseIdentifier:dayCellId];
 }
@@ -84,8 +82,10 @@ NSString * const dayCellId = @"dayCellId";
         NSInteger section = days / numberOfDaysInWeek;
         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForItem:item inSection:section];
         NSIndexPath *scrolledIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
+        self.shouldUpdateContentOffset = YES;
         [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
         [self.collectionView selectItemAtIndexPath:selectedIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [self collectionView:self.collectionView didSelectItemAtIndexPath:selectedIndexPath];
     }
 }
 
