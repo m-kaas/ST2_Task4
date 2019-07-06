@@ -9,6 +9,7 @@
 #import "DayCollectionView.h"
 #import "EventCollectionViewCell.h"
 #import "EventGridLayout.h"
+#import "EventStore.h"
 
 NSString * const eventCellId = @"eventCellId";
 
@@ -96,7 +97,8 @@ NSString * const eventCellId = @"eventCellId";
     NSInteger duration = 0;
     if ([self.dataSource respondsToSelector:@selector(dayCollectionView:eventForItemAtIndexPath:)]) {
         EKEvent *event = [self.dataSource dayCollectionView:self eventForItemAtIndexPath:indexPath];
-        duration = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:event.startDate toDate:event.endDate options:0].minute;
+        //duration = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:event.startDate toDate:event.endDate options:0].minute;
+        duration = [[EventStore appCalendar] components:NSCalendarUnitMinute fromDate:event.startDate toDate:event.endDate options:0].minute;
     }
     return duration;
 }
@@ -105,8 +107,10 @@ NSString * const eventCellId = @"eventCellId";
     NSInteger start = 0;
     if ([self.dataSource respondsToSelector:@selector(dayCollectionView:eventForItemAtIndexPath:)]) {
         EKEvent *event = [self.dataSource dayCollectionView:self eventForItemAtIndexPath:indexPath];
-        NSDate *startOfDay = [[NSCalendar currentCalendar] startOfDayForDate:event.startDate];
-        start = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:startOfDay toDate:event.startDate options:0].minute;
+        //NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+        NSCalendar *currentCalendar = [EventStore appCalendar];
+        NSDate *startOfDay = [currentCalendar startOfDayForDate:event.startDate];
+        start = [currentCalendar components:NSCalendarUnitMinute fromDate:startOfDay toDate:event.startDate options:0].minute;
     }
     return start;
 }

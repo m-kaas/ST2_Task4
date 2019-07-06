@@ -9,6 +9,7 @@
 #import "WeekCollectionView.h"
 #import "WeekCollectionViewCell.h"
 #import "UIColor+CustomColors.h"
+#import "EventStore.h"
 
 NSString * const dayCellId = @"dayCellId";
 
@@ -77,14 +78,15 @@ NSString * const dayCellId = @"dayCellId";
 - (void)selectToday {
     if ([self.dataSource respondsToSelector:@selector(startDateForWeekCollectionView:)]) {
         NSDate *startDate = [self.dataSource startDateForWeekCollectionView:self];
-        NSInteger days = [[NSCalendar currentCalendar] components:NSCalendarUnitDay fromDate:startDate toDate:[NSDate date] options:0].day;
+        //NSInteger days = [[NSCalendar currentCalendar] components:NSCalendarUnitDay fromDate:startDate toDate:[NSDate date] options:0].day;
+        NSInteger days = [[EventStore appCalendar] components:NSCalendarUnitDay fromDate:startDate toDate:[NSDate date] options:0].day;
         NSInteger item = days % numberOfDaysInWeek;
         NSInteger section = days / numberOfDaysInWeek;
         NSIndexPath *selectedIndexPath = [NSIndexPath indexPathForItem:item inSection:section];
         NSIndexPath *scrolledIndexPath = [NSIndexPath indexPathForItem:0 inSection:section];
         self.shouldUpdateContentOffset = YES;
         [self.collectionView scrollToItemAtIndexPath:scrolledIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-        [self.collectionView selectItemAtIndexPath:selectedIndexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone];
+        [self.collectionView selectItemAtIndexPath:selectedIndexPath animated:YES scrollPosition:UICollectionViewScrollPositionNone];
         [self collectionView:self.collectionView didSelectItemAtIndexPath:selectedIndexPath];
     }
 }
@@ -109,10 +111,12 @@ NSString * const dayCellId = @"dayCellId";
         [self.dataSource respondsToSelector:@selector(weekCollectionView:hasEventsForDate:)]) {
         NSInteger days = indexPath.section * numberOfDaysInWeek + indexPath.item;
         NSDate *startDate = [self.dataSource startDateForWeekCollectionView:self];
-        NSDate *eventDate = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:days toDate:startDate options:0];
-        NSDateComponents *dateComponents = [[NSCalendar currentCalendar] components:NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:eventDate];
+        //NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+        NSCalendar *currentCalendar = [EventStore appCalendar];
+        NSDate *eventDate = [currentCalendar dateByAddingUnit:NSCalendarUnitDay value:days toDate:startDate options:0];
+        NSDateComponents *dateComponents = [currentCalendar components:NSCalendarUnitDay|NSCalendarUnitWeekday fromDate:eventDate];
         cell.dateLabel.text = [NSString stringWithFormat:@"%ld", dateComponents.day];
-        cell.dayLabel.text = [NSCalendar currentCalendar].shortWeekdaySymbols[dateComponents.weekday - 1].uppercaseString;
+        cell.dayLabel.text = currentCalendar.shortWeekdaySymbols[dateComponents.weekday - 1].uppercaseString;
         BOOL hasEvents = [self.dataSource weekCollectionView:self hasEventsForDate:eventDate];
         if (hasEvents) {
             cell.dotLabel.textColor = [UIColor customWhiteColor];

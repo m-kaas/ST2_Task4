@@ -14,6 +14,7 @@
 #import "TimeLabelView.h"
 #import "TimeLabelViewLayoutAttributes.h"
 #import "CurrentTimeLineView.h"
+#import "EventStore.h"
 
 @interface EventGridLayout ()
 
@@ -116,7 +117,8 @@
 #pragma mark - Private
 
 - (void)startTimeChangedTimer {
-    NSDate *nextMinuteDate =  [[NSCalendar currentCalendar] nextDateAfterDate:[NSDate date] matchingUnit:NSCalendarUnitSecond value:0 options:NSCalendarMatchNextTime];
+    //NSDate *nextMinuteDate =  [[NSCalendar currentCalendar] nextDateAfterDate:[NSDate date] matchingUnit:NSCalendarUnitSecond value:0 options:NSCalendarMatchNextTime];
+    NSDate *nextMinuteDate =  [[EventStore appCalendar] nextDateAfterDate:[NSDate date] matchingUnit:NSCalendarUnitSecond value:0 options:NSCalendarMatchNextTime];
     NSTimer *minuteTimer = [[NSTimer alloc] initWithFireDate:nextMinuteDate interval:60 target:self selector:@selector(timeChanged) userInfo:nil repeats:YES];
     [[NSRunLoop currentRunLoop] addTimer:minuteTimer forMode:NSDefaultRunLoopMode];
 }
@@ -257,25 +259,24 @@
             NSIndexPath *indexPath = [NSIndexPath indexPathForItem:i inSection:0];
             NSInteger start = [self.dataSource startOfEventAtIndexPath:indexPath];
             NSInteger section = start / minutesInSection;
-            if (section % numberOfSectionsInHour == 0) {
-                NSArray *sectionTimesAttributes = [self.attributesCache objectForKey:sectionTimeAttributesKey];
-                if (sectionTimesAttributes) {
-                    NSMutableArray *attributesWithoutEventSection = [NSMutableArray arrayWithArray:sectionTimesAttributes];
-                    [attributesWithoutEventSection removeObjectAtIndex:(section / numberOfSectionsInHour)];
-                    sectionTimesAttributes = [attributesWithoutEventSection copy];
-                    [self.attributesCache setObject:sectionTimesAttributes forKey:sectionTimeAttributesKey];
-                }
-            }
-            BOOL hadEventsInThisSection = NO;
             CGRect viewFrame = CGRectMake(self.collectionView.layoutMargins.left, section * sectionHeight, xOffset, sectionHeight);
+            BOOL hadEventsInThisSection = NO;
             for (TimeLabelViewLayoutAttributes *previousEvent in timesAttributes) {
                 if (CGRectIntersectsRect(viewFrame, previousEvent.frame)) {
                     hadEventsInThisSection = YES;
                     break;
                 }
             }
-            if (hadEventsInThisSection) {
+            if (hadEventsInThisSection) { // show only the time of the earlies event
                 continue;
+            }
+            if (section % numberOfSectionsInHour == 0) { // hide section time if event is in this section
+                NSArray *sectionTimesAttributes = [self.attributesCache objectForKey:sectionTimeAttributesKey];
+                if (sectionTimesAttributes) {
+                    NSInteger sectionIndex = section / numberOfSectionsInHour;
+                    TimeLabelViewLayoutAttributes *attr = sectionTimesAttributes[sectionIndex];
+                    attr.hidden = YES;
+                }
             }
             TimeLabelViewLayoutAttributes *attr = [TimeLabelViewLayoutAttributes layoutAttributesForDecorationViewOfKind:eventTimeDecorationViewKind withIndexPath:indexPath];
             attr.frame = viewFrame;
@@ -293,8 +294,10 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     UICollectionViewLayoutAttributes *lineAttributes = [UICollectionViewLayoutAttributes layoutAttributesForDecorationViewOfKind:currentTimeLineDecorationViewKind withIndexPath:indexPath];
     NSDate *today = [NSDate date];
-    NSDate *startOfDay = [[NSCalendar currentCalendar] startOfDayForDate:today];
-    NSInteger start = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:startOfDay toDate:today options:0].minute;
+    //NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    NSCalendar *currentCalendar = [EventStore appCalendar];
+    NSDate *startOfDay = [currentCalendar startOfDayForDate:today];
+    NSInteger start = [currentCalendar components:NSCalendarUnitMinute fromDate:startOfDay toDate:today options:0].minute;
     CGFloat lineY = 1.0 * start / minutesInSection * sectionHeight;
     CGRect viewFrame = CGRectMake(xOffset, lineY, self.collectionView.bounds.size.width - xOffset, 1);
     lineAttributes.frame = viewFrame;
@@ -306,35 +309,31 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:0];
     TimeLabelViewLayoutAttributes *timeAttributes = [TimeLabelViewLayoutAttributes layoutAttributesForDecorationViewOfKind:currentTimeDecorationViewKind withIndexPath:indexPath];
     NSDate *today = [NSDate date];
-    NSDate *startOfDay = [[NSCalendar currentCalendar] startOfDayForDate:today];
-    NSInteger start = [[NSCalendar currentCalendar] components:NSCalendarUnitMinute fromDate:startOfDay toDate:today options:0].minute;
+    //NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    NSCalendar *currentCalendar = [EventStore appCalendar];
+    NSDate *startOfDay = [currentCalendar startOfDayForDate:today];
+    NSInteger start = [currentCalendar components:NSCalendarUnitMinute fromDate:startOfDay toDate:today options:0].minute;
     CGFloat lineY = 1.0 * start / minutesInSection * sectionHeight;
     CGFloat timeY = lineY - sectionHeight / 2.0;
-    NSArray *sectionTimesAttributes = [self.attributesCache objectForKey:sectionTimeAttributesKey];
-    if (sectionTimesAttributes) {
-        NSMutableArray *attributesWithoutCurrentSection = [NSMutableArray arrayWithArray:sectionTimesAttributes];
-        [sectionTimesAttributes enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            TimeLabelViewLayoutAttributes *attr = (TimeLabelViewLayoutAttributes *)obj;
-            if (CGRectGetMinY(attr.frame) <= lineY && CGRectGetMaxY(attr.frame) > lineY) {
-                [attributesWithoutCurrentSection removeObjectAtIndex:idx];
-                *stop = YES;
+    if (self.showCurrentTime) { // hide section and event times overlapping current time
+        NSArray *sectionTimesAttributes = [self.attributesCache objectForKey:sectionTimeAttributesKey];
+        if (sectionTimesAttributes) {
+            for (TimeLabelViewLayoutAttributes *attr in sectionTimesAttributes) {
+                if (CGRectGetMinY(attr.frame) <= lineY && CGRectGetMaxY(attr.frame) > lineY) {
+                    attr.hidden = YES;
+                    break;
+                }
             }
-        }];
-        sectionTimesAttributes = [attributesWithoutCurrentSection copy];
-        [self.attributesCache setObject:sectionTimesAttributes forKey:sectionTimeAttributesKey];
-    }
-    NSArray *eventTimesAttributes = [self.attributesCache objectForKey:eventTimeAttributesKey];
-    if (eventTimesAttributes) {
-        NSMutableArray *attributesWithoutCurrentSection = [NSMutableArray arrayWithArray:eventTimesAttributes];
-        [eventTimesAttributes enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            TimeLabelViewLayoutAttributes *attr = (TimeLabelViewLayoutAttributes *)obj;
-            if (CGRectGetMinY(attr.frame) <= lineY && CGRectGetMaxY(attr.frame) > lineY) {
-                [attributesWithoutCurrentSection removeObjectAtIndex:idx];
-                *stop = YES;
+        }
+        NSArray *eventTimesAttributes = [self.attributesCache objectForKey:eventTimeAttributesKey];
+        if (eventTimesAttributes) {
+            for (TimeLabelViewLayoutAttributes *attr in eventTimesAttributes) {
+                if (CGRectGetMinY(attr.frame) <= lineY && CGRectGetMaxY(attr.frame) > lineY) {
+                    attr.hidden = YES;
+                    break;
+                }
             }
-        }];
-        eventTimesAttributes = [attributesWithoutCurrentSection copy];
-        [self.attributesCache setObject:eventTimesAttributes forKey:eventTimeAttributesKey];
+        }
     }
     CGRect viewFrame = CGRectMake(self.collectionView.layoutMargins.left, timeY, xOffset, sectionHeight);
     timeAttributes.frame = viewFrame;

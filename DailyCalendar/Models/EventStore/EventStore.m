@@ -28,7 +28,8 @@ const NSInteger numberOfDaysInWeek = 7;
     if (!self.eventsByDate) {
         self.eventsByDate = [NSMutableDictionary dictionary];
     }
-    NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    //NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    NSCalendar *currentCalendar = [EventStore appCalendar];
     NSDate *startDate = [currentCalendar startOfDayForDate:event.startDate];
     if ([self.eventsByDate.allKeys containsObject:startDate]) {
         [self.eventsByDate[startDate] addObject:event];
@@ -38,8 +39,19 @@ const NSInteger numberOfDaysInWeek = 7;
     }
 }
 
++ (NSCalendar *)appCalendar {
+    static NSCalendar *ruCalendar = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        ruCalendar = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+        ruCalendar.locale = [NSLocale localeWithLocaleIdentifier:@"ru_RU"];
+    });
+    return ruCalendar;
+}
+
 - (void)loadEventsFromDate:(NSDate *)startDate toDate:(NSDate *)endDate {
-    NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    //NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    NSCalendar *currentCalendar = [EventStore appCalendar];
     NSInteger days = -[currentCalendar ordinalityOfUnit:NSCalendarUnitWeekday inUnit:NSCalendarUnitWeekOfYear forDate:startDate] + 1;
     self.startDate = [currentCalendar startOfDayForDate:[currentCalendar dateByAddingUnit:NSCalendarUnitDay value:days toDate:startDate options:0]];
     days = numberOfDaysInWeek - [currentCalendar ordinalityOfUnit:NSCalendarUnitWeekday inUnit:NSCalendarUnitWeekOfYear forDate:endDate] + 1;
@@ -67,7 +79,8 @@ const NSInteger numberOfDaysInWeek = 7;
 
 - (NSArray *)eventsForDate:(NSDate *)date {
     NSArray *events = [NSArray array];
-    NSDate *startDate = [[NSCalendar currentCalendar] startOfDayForDate:date];
+    //NSDate *startDate = [[NSCalendar currentCalendar] startOfDayForDate:date];
+    NSDate *startDate = [[EventStore appCalendar] startOfDayForDate:date];
     if ([self.eventsByDate.allKeys containsObject:startDate]) {
         events = self.eventsByDate[startDate];
     }
@@ -75,14 +88,16 @@ const NSInteger numberOfDaysInWeek = 7;
 }
 
 - (BOOL)hasEventsForDate:(NSDate *)date {
-    NSDate *startDate = [[NSCalendar currentCalendar] startOfDayForDate:date];
+    //NSDate *startDate = [[NSCalendar currentCalendar] startOfDayForDate:date];
+    NSDate *startDate = [[EventStore appCalendar] startOfDayForDate:date];
     BOOL hasEvents = [self.eventsByDate.allKeys containsObject:startDate];
     return hasEvents;
 }
 
 - (NSInteger)numberOfEventsForDate:(NSDate *)date {
     NSInteger numberOfEvents = 0;
-    NSDate *startDate = [[NSCalendar currentCalendar] startOfDayForDate:date];
+    //NSDate *startDate = [[NSCalendar currentCalendar] startOfDayForDate:date];
+    NSDate *startDate = [[EventStore appCalendar] startOfDayForDate:date];
     if ([self.eventsByDate.allKeys containsObject:startDate]) {
         NSArray *events = self.eventsByDate[startDate];
         numberOfEvents = events.count;

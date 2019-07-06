@@ -31,7 +31,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self addTodayButton];
+    //[self addTodayButton];
     self.selectedDate = [NSDate date];
     self.weekView.delegate = self;
     self.weekView.dataSource = self;
@@ -70,7 +70,8 @@
 }
 
 - (void)setupCalendarInfo {
-    NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    //NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    NSCalendar *currentCalendar = [EventStore appCalendar];
     NSInteger years = -1;
     NSDate *oneYearAgo = [currentCalendar dateByAddingUnit:NSCalendarUnitYear value:years toDate:[NSDate date] options:0];
     years = 1;
@@ -100,6 +101,7 @@
         _selectedDate = selectedDate;
     }
     NSDateFormatter *formatter = [NSDateFormatter new];
+    formatter.locale = [EventStore appCalendar].locale;
     formatter.dateFormat = @"dd MMMM yyyy";
     self.navigationItem.title = [formatter stringFromDate:self.selectedDate];
 }
@@ -108,9 +110,11 @@
 
 - (void)weekCollectionView:(WeekCollectionView *)weekCollectionView didSelectDateAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger days = numberOfDaysInWeek * indexPath.section + indexPath.item;
-    NSDate *date = [[NSCalendar currentCalendar] dateByAddingUnit:NSCalendarUnitDay value:days toDate:self.eventStore.startDate options:0];
+    //NSCalendar *currentCalendar = [NSCalendar currentCalendar];
+    NSCalendar *currentCalendar = [EventStore appCalendar];
+    NSDate *date = [currentCalendar dateByAddingUnit:NSCalendarUnitDay value:days toDate:self.eventStore.startDate options:0];
     self.selectedDate = date;
-    self.dayView.showCurrentTime = [[NSCalendar currentCalendar] isDate:date inSameDayAsDate:[NSDate date]];
+    self.dayView.showCurrentTime = [currentCalendar isDate:date inSameDayAsDate:[NSDate date]];
     [self.dayView reloadData];
 }
 

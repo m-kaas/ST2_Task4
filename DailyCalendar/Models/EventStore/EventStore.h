@@ -17,6 +17,7 @@ extern const NSInteger numberOfDaysInWeek;
 @property (assign, nonatomic, readonly) NSInteger numberOfDays;
 @property (assign, nonatomic, readonly) NSInteger numberOfWeeks;
 
++ (NSCalendar *)appCalendar;
 - (void)addEvent:(EKEvent *)event;
 - (void)loadEventsFromDate:(NSDate *)startDate toDate:(NSDate *)endDate;
 - (NSArray *)eventsForDate:(NSDate *)date;
