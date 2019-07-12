@@ -41,8 +41,8 @@
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="DJH-T2-ecD" secondAttribute="trailing" id="VVI-3O-CxI"/>
                 <constraint firstItem="Q5M-cg-NOt" firstAttribute="bottom" secondItem="DJH-T2-ecD" secondAttribute="bottom" id="ivs-QF-0ju"/>
                 <constraint firstItem="DJH-T2-ecD" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="sqh-ci-Aw8"/>
-                <constraint firstItem="Q5M-cg-NOt" firstAttribute="trailing" secondItem="RAr-tb-P1h" secondAttribute="trailing" id="uus-aW-5yO"/>
-                <constraint firstItem="RAr-tb-P1h" firstAttribute="leading" secondItem="Q5M-cg-NOt" secondAttribute="leading" id="xNg-Eo-0hw"/>
+                <constraint firstAttribute="trailing" secondItem="RAr-tb-P1h" secondAttribute="trailing" id="uus-aW-5yO"/>
+                <constraint firstItem="RAr-tb-P1h" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="xNg-Eo-0hw"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
         </view>

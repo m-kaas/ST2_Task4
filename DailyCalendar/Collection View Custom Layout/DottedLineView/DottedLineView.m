@@ -15,6 +15,7 @@ const CGFloat dotSize = 2;
 
 - (void)commonInit {
     self.backgroundColor = [UIColor clearColor];
+    self.contentMode = UIViewContentModeRedraw;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)coder
